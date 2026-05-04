@@ -19,10 +19,10 @@ export {
   Calendar      as IconCalendar,
 
   /* Social */
-  Instagram     as IconInstagram,
-  Facebook      as IconFacebook,
-  Linkedin      as IconLinkedin,
-  Twitter       as IconTwitter,
+  InstagramIcon as IconInstagram,
+  FacebookIcon  as IconFacebook,
+  LinkedinIcon  as IconLinkedin,
+  TwitterIcon   as IconTwitter,
 
   /* Contact */
   Mail          as IconMail,
