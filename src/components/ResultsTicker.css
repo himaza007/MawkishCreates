@@ -1,0 +1,96 @@
+.ticker-wrap {
+  background: linear-gradient(90deg, var(--purple-900), var(--purple-800), var(--purple-900));
+  border-top: 1px solid rgba(123,47,247,0.3);
+  border-bottom: 1px solid rgba(123,47,247,0.3);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 52px;
+  position: relative;
+}
+
+.ticker-label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-6) 0 var(--space-8);
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--purple-300);
+  text-transform: uppercase;
+  background: var(--purple-900);
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  border-right: 1px solid rgba(123,47,247,0.3);
+}
+
+.ticker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple-400);
+  animation: tickerPulse 1.5s ease-in-out infinite;
+}
+
+/* Faster pulse while fetching live data */
+.ticker-dot--loading {
+  background: #f59e0b;
+  animation: tickerPulse 0.6s ease-in-out infinite;
+}
+
+@keyframes tickerPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.ticker-track {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+
+.ticker-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  animation: tickerScroll 40s linear infinite;
+}
+
+.ticker-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  padding: 0 var(--space-8);
+}
+
+.ticker-check {
+  color: var(--purple-400);
+  font-size: 0.6rem;
+}
+
+/* Source attribution e.g. "— Forbes" in a softer purple */
+.ticker-source {
+  color: var(--purple-400);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
