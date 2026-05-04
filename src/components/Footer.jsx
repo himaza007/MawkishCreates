@@ -43,7 +43,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Link to="/" className="footer-logo" aria-label="Mawkish Creates">
               <img
-                src="/Mawkish Creates Logo.png"
+                src="/mawkish-logo.png"
                 alt="Mawkish Creates"
                 className="footer-logo-img"
               />

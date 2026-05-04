@@ -175,7 +175,7 @@ export default function LoadingScreen({ onDone }) {
 
           <img
             ref={logoRef}
-            src="/Mawkish Creates Logo.png"
+            src="/mawkish-logo.png"
             alt="Mawkish Creates"
             className="loader-logo-img"
           />
