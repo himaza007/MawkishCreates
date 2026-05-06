@@ -1,7 +1,7 @@
 .wwu-hero {
   position: relative;
   background: var(--black);
-  background-image: url('/MawkishCreates/public/WorkwithUs-hero-Dv-StQno.webp');  /* ← add this */
+  background-image: url('/WorkwithUs-hero-Dv-StQno.webp');  /* ← add this */
   background-size: cover;                         /* ← add this */
   background-position: center center;             /* ← add this */
   background-repeat: no-repeat;                   /* ← add this */
