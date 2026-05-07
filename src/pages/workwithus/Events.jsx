@@ -457,7 +457,11 @@ function TrackForm({ track }) {
   const onSubmit = async e => {
     e.preventDefault(); setSubmitting(true); setError(null)
     try {
-      await api.post('/leads', { ...form, service: `Events — ${track.label}`, track: track.id })
+      await api.post('/leads', {
+  ...form,
+  service: 'Events',
+  track: track.label,
+})
       setSubmitted(true)
     } catch (err) { setError(err?.message || 'Something went wrong.') }
     finally { setSubmitting(false) }
