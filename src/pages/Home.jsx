@@ -41,65 +41,37 @@ function useLenis() {
 /* ── Hero Particle Canvas - Original Hero Layer ───────────── */
 function ParticleCanvas() {
   const canvasRef = useRef(null)
-
   useEffect(() => {
+    if (isMobile()) return          // ← skip on mobile
     const canvas = canvasRef.current
     if (!canvas) return
-
     const ctx = canvas.getContext('2d')
-    let animId
-    let width
-    let height
-    let particles
-
-    const mouse = { x: -9999, y: -9999 }
+    let animId, W, H, particles
+    const MOUSE = { x: -9999, y: -9999 }
+    const resize = () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight }
     const rand = (a, b) => Math.random() * (b - a) + a
-
-    const resize = () => {
-      width = canvas.width = canvas.offsetWidth
-      height = canvas.height = canvas.offsetHeight
-    }
-
     const init = () => {
       resize()
-      particles = Array.from({ length: 90 }, () => ({
-        x: rand(0, width),
-        y: rand(0, height),
-        vx: rand(-0.25, 0.25),
-        vy: rand(-0.25, 0.25),
-        r: rand(1.5, 3),
-      }))
+      // 90 particles on desktop → 40 on mid-range
+      const count = window.innerWidth <= 1024 ? 40 : 90
+      particles = Array.from({ length: count }, () => ({ x: rand(0,W), y: rand(0,H), vx: rand(-0.25,0.25), vy: rand(-0.25,0.25), r: rand(1.5,3) }))
     }
-
     const draw = () => {
-      ctx.clearRect(0, 0, width, height)
-
+      ctx.clearRect(0, 0, W, H)
       particles.forEach(p => {
-        p.x += p.vx
-        p.y += p.vy
-
-        if (p.x < 0 || p.x > width) p.vx *= -1
-        if (p.y < 0 || p.y > height) p.vy *= -1
-
-        const dx = p.x - mouse.x
-        const dy = p.y - mouse.y
-        const d = Math.sqrt(dx * dx + dy * dy)
-
-        if (d < 90) {
-          p.x += (dx / d) * 1.5
-          p.y += (dy / d) * 1.5
-        }
+        p.x += p.vx; p.y += p.vy
+        if (p.x < 0 || p.x > W) p.vx *= -1
+        if (p.y < 0 || p.y > H) p.vy *= -1
+        const dx = p.x - MOUSE.x, dy = p.y - MOUSE.y, d = Math.sqrt(dx*dx+dy*dy)
+        if (d < 90) { p.x += (dx/d)*1.5; p.y += (dy/d)*1.5 }
       })
-
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-
+        for (let j = i+1; j < particles.length; j++) {
+          const dx = particles[i].x-particles[j].x, dy = particles[i].y-particles[j].y
+          const dist = Math.sqrt(dx*dx+dy*dy)
           if (dist < 140) {
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(163,110,247,${(1 - dist / 140) * 0.3})`
+            ctx.strokeStyle = `rgba(163,110,247,${(1-dist/140)*0.3})`
             ctx.lineWidth = 0.8
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
@@ -107,43 +79,18 @@ function ParticleCanvas() {
           }
         }
       }
-
-      particles.forEach(p => {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(163,110,247,0.65)'
-        ctx.fill()
-      })
-
+      particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(163,110,247,0.65)'; ctx.fill() })
       animId = requestAnimationFrame(draw)
     }
-
-    const onMove = e => {
-      const rect = canvas.getBoundingClientRect()
-      mouse.x = e.clientX - rect.left
-      mouse.y = e.clientY - rect.top
-    }
-
-    const onLeave = () => {
-      mouse.x = -9999
-      mouse.y = -9999
-    }
-
-    init()
-    draw()
-
+    const onMove = e => { const r = canvas.getBoundingClientRect(); MOUSE.x = e.clientX-r.left; MOUSE.y = e.clientY-r.top }
+    const onLeave = () => { MOUSE.x = -9999; MOUSE.y = -9999 }
+    init(); draw()
     window.addEventListener('resize', init)
     canvas.addEventListener('mousemove', onMove)
     canvas.addEventListener('mouseleave', onLeave)
-
-    return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', init)
-      canvas.removeEventListener('mousemove', onMove)
-      canvas.removeEventListener('mouseleave', onLeave)
-    }
+    return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', init); canvas.removeEventListener('mousemove', onMove); canvas.removeEventListener('mouseleave', onLeave) }
   }, [])
-
+  if (isMobile()) return null       // ← render nothing on mobile
   return <canvas ref={canvasRef} className="hero-particle-canvas" aria-hidden="true" />
 }
 
@@ -897,12 +844,10 @@ export default function Home() {
           HERO - left untouched in structure and styling
       ═════════════════════════════════════════════════════ */}
       <section className="hero" aria-label="Hero">
-        <div className="fluid-bg" aria-hidden="true">
-          <div className="fluid-blob fluid-blob-1" />
-          <div className="fluid-blob fluid-blob-2" />
-          <div className="fluid-blob fluid-blob-3" />
-          <div className="fluid-blob fluid-blob-4" />
-        </div>
+      <div className="fluid-bg" aria-hidden="true">
+        <div className="fluid-blob fluid-blob-1" />
+        <div className="fluid-blob fluid-blob-2" />
+      </div>
 
         <div className="hero-bg-orb hero-bg-orb-1" aria-hidden="true" />
         <div className="hero-bg-orb hero-bg-orb-2" aria-hidden="true" />

@@ -994,6 +994,22 @@
 }
 
 @media (max-width: 768px) {
+
+  .hero-bg-orb-1,
+  .hero-bg-orb-2,
+  .hero-bg-orb-3 {
+    animation: none;
+    display: none;
+  }
+
+  .fluid-bg {
+    display: none;
+  }
+
+  .hero-particle-canvas {
+    display: none;
+  }
+
   .hero-title {
     font-size: clamp(2.5rem, 10vw, 4rem);
   }
