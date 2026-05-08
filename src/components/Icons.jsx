@@ -1,31 +1,3 @@
-import {
-  ArrowRight,
-  ChevronDown,
-  Menu,
-  X,
-  TrendingUp,
-  Users,
-  MessageSquare,
-  BarChart2,
-  Target,
-  Smartphone,
-  Lightbulb,
-  Zap,
-  Calendar,
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Lock,
-  CheckCircle,
-  Star,
-  Heart,
-  Globe,
-  Award,
-  Search,
-  Eye,
-} from 'lucide-react'
-
 export {
   ArrowRight as IconArrowRight,
   ChevronDown as IconChevronDown,
@@ -52,7 +24,7 @@ export {
   Award as IconAward,
   Search as IconSearch,
   Eye as IconEye,
-}
+} from 'lucide-react'
 
 export const IconInstagram = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
