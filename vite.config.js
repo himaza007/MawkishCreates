@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  appType: 'spa', // ← tells Vite to serve index.html for all 404s
   server: {
     port: 5173,
     strictPort: true,
