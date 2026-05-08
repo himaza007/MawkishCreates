@@ -39,6 +39,7 @@
   border-radius: 50%;
   pointer-events: none;
   filter: blur(60px);
+  will-change: transform;
 }
 
 .hero-bg-orb-1 {
@@ -227,42 +228,22 @@
   border-radius: 50%;
   opacity: 0.55;
   mix-blend-mode: multiply;
+  will-change: transform;
+  contain: layout style paint;
 }
 
 .fluid-blob-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(191,160,251,0.7) 0%, rgba(157,95,250,0.4) 50%, transparent 70%);
-  top: -150px;
-  left: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(191, 160, 251, 0.7) 0%, rgba(157, 95, 250, 0.4) 50%, transparent 70%);
+  top: -150px; left: -100px;
   animation: blob1 8s ease-in-out infinite;
 }
 
 .fluid-blob-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(219,200,253,0.6) 0%, rgba(123,47,247,0.3) 50%, transparent 70%);
-  bottom: -100px;
-  right: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(219, 200, 253, 0.6) 0%, rgba(123, 47, 247, 0.3) 50%, transparent 70%);
+  bottom: -100px; right: -80px;
   animation: blob2 10s ease-in-out infinite;
-}
-
-.fluid-blob-3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(240,232,255,0.8) 0%, rgba(191,160,251,0.4) 50%, transparent 70%);
-  top: 40%;
-  left: 40%;
-  animation: blob3 12s ease-in-out infinite;
-}
-
-.fluid-blob-4 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(157,95,250,0.35) 0%, transparent 60%);
-  top: 10%;
-  right: 20%;
-  animation: blob4 9s ease-in-out infinite reverse;
 }
 
 @keyframes blob1 {

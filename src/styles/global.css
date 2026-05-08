@@ -276,10 +276,9 @@ input, textarea, select {
 }
 
 .btn-ghost {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.18);
   color: var(--white);
   border: 1.5px solid rgba(255,255,255,0.25);
-  backdrop-filter: blur(8px);
 }
 
 .btn-ghost:hover {
@@ -311,7 +310,7 @@ input, textarea, select {
 .card:hover {
   border-color: var(--purple-300);
   box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  transform: translate3d(0, -4px, 0);
 }
 
 .card:hover::before {

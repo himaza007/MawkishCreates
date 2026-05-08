@@ -19,13 +19,11 @@ export default function FluidBackground({ opacity = 0.12 }) {
       const H = canvas.height
       ctx.clearRect(0, 0, W, H)
 
-      const layers = [
-        { freq: 0.003, amp: 0.38, speed: 0.0008, hueOffset: 0   },
-        { freq: 0.004, amp: 0.32, speed: 0.0012, hueOffset: 40  },
-        { freq: 0.002, amp: 0.42, speed: 0.0006, hueOffset: 80  },
-        { freq: 0.005, amp: 0.28, speed: 0.0015, hueOffset: 140 },
-        { freq: 0.003, amp: 0.35, speed: 0.001,  hueOffset: 200 },
-      ]
+    const layers = [
+      { freq: 0.003, amp: 0.38, speed: 0.0008, hueOffset: 0  },
+      { freq: 0.004, amp: 0.32, speed: 0.0012, hueOffset: 40 },
+      { freq: 0.002, amp: 0.42, speed: 0.0006, hueOffset: 80 },
+    ]
 
       layers.forEach(({ freq, amp, speed, hueOffset }) => {
         const hue = ((t * 60 + hueOffset) % 360)
@@ -64,16 +62,31 @@ export default function FluidBackground({ opacity = 0.12 }) {
       })
 
       t++
-      animId = requestAnimationFrame(draw)
-    }
+    animId = setTimeout(() => requestAnimationFrame(draw), 33)
+  }
 
-    resize()
-    draw()
-    window.addEventListener('resize', resize)
-    return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', resize)
-    }
+  resize()
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        draw()
+      } else {
+        clearTimeout(animId)
+        cancelAnimationFrame(animId)
+      }
+    },
+    { threshold: 0 }
+  )
+  observer.observe(canvas)
+
+  window.addEventListener('resize', resize)
+  return () => {
+    clearTimeout(animId)
+    cancelAnimationFrame(animId)
+    observer.disconnect()
+    window.removeEventListener('resize', resize)
+  }
   }, [])
 
   return (
@@ -88,7 +101,8 @@ export default function FluidBackground({ opacity = 0.12 }) {
         pointerEvents: 'none',
         opacity,
         zIndex:        0,
-        mixBlendMode:  'multiply',
+        mixBlendMode:  'normal',
+
       }}
     />
   )
