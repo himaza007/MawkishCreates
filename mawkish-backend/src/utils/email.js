@@ -1,10 +1,10 @@
 const nodemailer = require('nodemailer')
-const logger     = require('./logger')
+const logger = require('./logger')
 
 const createTransporter = () =>
   nodemailer.createTransport({
-    host:   process.env.SMTP_HOST,
-    port:   Number(process.env.SMTP_PORT) || 587,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,
     secure: Number(process.env.SMTP_PORT) === 465,
     auth: {
       user: process.env.SMTP_USER,
@@ -12,11 +12,129 @@ const createTransporter = () =>
     },
   })
 
+const escapeHtml = (value) => {
+  if (value === undefined || value === null || value === '') return '—'
+
+  return String(Array.isArray(value) ? value.join(', ') : value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
+}
+
+const baseEmailStyle = `
+  font-family: Cambria, Georgia, serif;
+  font-size: 11pt;
+  line-height: 1.15;
+  color: #222;
+`
+
+const FIELD_LABELS = {
+  name: 'Name',
+  company: 'Company',
+  email: 'Email',
+  phone: 'Phone',
+  industry: 'Industry',
+  service: 'Service',
+  track: 'Event Service Type',
+  budget: 'Budget',
+  description: 'Description',
+  socialHandles: 'Social Media Handles',
+  packagePreference: 'Package Preference',
+  websiteType: 'Website Type',
+  timeline: 'Timeline',
+  objective: 'Objective',
+  geography: 'Location / Geography',
+  timing: 'Timing',
+  event: 'Event',
+  submittedAt: 'Submitted At',
+}
+
+const getLeadFields = (lead) => {
+  if (lead.service === 'Events') {
+    return [
+      'name',
+      'company',
+      'email',
+      'phone',
+      'industry',
+      'service',
+      'track',
+      'objective',
+      'geography',
+      'timing',
+      'budget',
+      'event',
+      'description',
+    ]
+  }
+
+  if (lead.service === 'Social Media Management') {
+    return [
+      'name',
+      'company',
+      'email',
+      'phone',
+      'industry',
+      'service',
+      'socialHandles',
+      'budget',
+      'description',
+    ]
+  }
+
+  if (lead.service === 'Web Development') {
+    return [
+      'name',
+      'email',
+      'phone',
+      'company',
+      'service',
+      'packagePreference',
+      'industry',
+      'websiteType',
+      'timeline',
+      'description',
+    ]
+  }
+
+  return [
+    'name',
+    'company',
+    'email',
+    'phone',
+    'industry',
+    'service',
+    'budget',
+    'description',
+  ]
+}
+
+const buildCompanyLeadRows = (lead) => {
+  return getLeadFields(lead)
+    .map((field) => {
+      const label = FIELD_LABELS[field] || field
+
+      return `
+        <tr>
+          <td style="${baseEmailStyle} padding: 8px 14px; background: #f1f1f1; font-weight: bold; width: 190px; vertical-align: top;">
+            ${escapeHtml(label)}
+          </td>
+          <td style="${baseEmailStyle} padding: 8px 14px; border-bottom: 1px solid #ddd; vertical-align: top;">
+            ${escapeHtml(lead[field])}
+          </td>
+        </tr>
+      `
+    })
+    .join('')
+}
+
 /**
- * Notify the agency when a new lead is submitted.
+ * Notify the company when a new enquiry is submitted.
  */
 const sendLeadNotification = async (lead) => {
-  if (!process.env.SMTP_USER) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.NOTIFY_EMAIL) {
     logger.warn('Email not configured — skipping lead notification')
     return
   }
@@ -25,30 +143,30 @@ const sendLeadNotification = async (lead) => {
     const transporter = createTransporter()
 
     await transporter.sendMail({
-      from:    `"Mawkish Creates" <${process.env.SMTP_USER}>`,
-      to:      process.env.NOTIFY_EMAIL,
-      subject: `New Lead: ${lead.name} — ${lead.company}`,
+      from: `"Mawkish Creates" <${process.env.SMTP_USER}>`,
+      to: process.env.NOTIFY_EMAIL,
+      subject: `New ${lead.service} Enquiry: ${lead.name}${lead.company ? ` — ${lead.company}` : ''}`,
       html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:auto;">
-          <h2 style="color:#5c18b8;">New Lead Inquiry</h2>
-          <table style="width:100%;border-collapse:collapse;">
-            ${[
-              ['Name',        lead.name],
-              ['Company',     lead.company],
-              ['Email',       lead.email],
-              ['Phone',       lead.phone || '—'],
-              ['Industry',    lead.industry],
-              ['Service',     lead.service],
-              ['Budget',      lead.budget || '—'],
-              ['Description', lead.description || '—'],
-            ].map(([k, v]) => `
-              <tr>
-                <td style="padding:8px 12px;background:#f4f4f5;font-weight:600;width:140px;">${k}</td>
-                <td style="padding:8px 12px;border-bottom:1px solid #e4e4e7;">${v}</td>
-              </tr>`).join('')}
+        <div style="${baseEmailStyle} max-width: 760px; margin: 0 auto;">
+          <h2 style="${baseEmailStyle} font-size: 18pt; color: #5b21b6; margin-bottom: 18px;">
+            New Lead Inquiry
+          </h2>
+
+          <table style="width: 100%; border-collapse: collapse; ${baseEmailStyle}">
+            ${buildCompanyLeadRows(lead)}
           </table>
-          <p style="color:#71717a;font-size:12px;margin-top:16px;">
-            Submitted at ${new Date().toLocaleString()}
+
+          <p style="${baseEmailStyle} margin-top: 18px; color: #666;">
+            Submitted at ${escapeHtml(lead.submittedAt || new Date().toLocaleString('en-LK', {
+              timeZone: 'Asia/Colombo',
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: true,
+            }))}
           </p>
         </div>
       `,
@@ -57,7 +175,6 @@ const sendLeadNotification = async (lead) => {
     logger.info(`Lead notification sent for ${lead.email}`)
   } catch (err) {
     logger.error(`Failed to send lead notification: ${err.message}`)
-    // Don't throw — email failure should not block the API response
   }
 }
 
@@ -65,35 +182,100 @@ const sendLeadNotification = async (lead) => {
  * Send a confirmation email to the person who submitted the form.
  */
 const sendLeadConfirmation = async (lead) => {
-  if (!process.env.SMTP_USER) return
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !lead.email) {
+    logger.warn('Email not configured — skipping confirmation email')
+    return
+  }
 
   try {
     const transporter = createTransporter()
 
     await transporter.sendMail({
-      from:    `"Mawkish Creates" <${process.env.SMTP_USER}>`,
-      to:      lead.email,
-      subject: "We've received your inquiry — Mawkish Creates",
+      from: `"Mawkish Creates" <${process.env.SMTP_USER}>`,
+      to: lead.email,
+      subject: "We've received your enquiry — Mawkish Creates",
       html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:auto;color:#27272a;">
-          <div style="background:linear-gradient(135deg,#1a0533,#420f8a);padding:32px;border-radius:12px 12px 0 0;text-align:center;">
-            <h1 style="color:#fff;margin:0;font-size:28px;">Mawkish Creates</h1>
-            <p style="color:rgba(255,255,255,0.7);margin:8px 0 0;">Social Media Marketing Agency</p>
-          </div>
-          <div style="background:#fafaf9;padding:32px;border:1px solid #e4e4e7;border-top:none;border-radius:0 0 12px 12px;">
-            <h2 style="color:#2d0a5e;">Hi ${lead.name},</h2>
-            <p>Thank you for reaching out to <strong>Mawkish Creates</strong>. We've received your inquiry and one of our marketing strategists will be in touch within <strong>24 hours</strong> to schedule a free discovery call.</p>
-            <p><strong>What you submitted:</strong></p>
-            <ul style="color:#52525b;line-height:2;">
-              <li>Service: ${lead.service}</li>
-              <li>Industry: ${lead.industry}</li>
-              ${lead.budget ? `<li>Budget: ${lead.budget}</li>` : ''}
-            </ul>
-            <p style="margin-top:24px;">In the meantime, feel free to explore our portfolio and success stories on our website.</p>
-            <p style="color:#71717a;font-size:13px;margin-top:32px;border-top:1px solid #e4e4e7;padding-top:16px;">
-              © ${new Date().getFullYear()} Mawkish Creates. From Sri Lanka to the world.
-            </p>
-          </div>
+        <div style="${baseEmailStyle} max-width: 680px; margin: 0 auto;">
+          <h1 style="${baseEmailStyle} font-size: 20pt; color: #5b21b6; margin-bottom: 12px;">
+            Mawkish Creates
+          </h1>
+
+          <h2 style="${baseEmailStyle} font-size: 14pt; margin-bottom: 12px;">
+            Hi ${escapeHtml(lead.name)},
+          </h2>
+
+          <p style="${baseEmailStyle}">
+            Thank you for contacting us.
+          </p>
+
+          <p style="${baseEmailStyle}">
+            We have received your enquiry and our team will review your details shortly.
+            One of our team members will get back to you soon.
+          </p>
+
+          <p style="${baseEmailStyle} font-weight: bold; margin-top: 18px;">
+            Your enquiry summary:
+          </p>
+
+          <table style="width: 100%; border-collapse: collapse; ${baseEmailStyle}">
+            <tr>
+              <td style="${baseEmailStyle} padding: 6px 12px; background: #f1f1f1; font-weight: bold; width: 170px;">Service</td>
+              <td style="${baseEmailStyle} padding: 6px 12px; border-bottom: 1px solid #ddd;">${escapeHtml(lead.service)}</td>
+            </tr>
+
+            ${
+              lead.service === 'Events' && lead.track
+                ? `
+                  <tr>
+                    <td style="${baseEmailStyle} padding: 6px 12px; background: #f1f1f1; font-weight: bold;">Event Service Type</td>
+                    <td style="${baseEmailStyle} padding: 6px 12px; border-bottom: 1px solid #ddd;">${escapeHtml(lead.track)}</td>
+                  </tr>
+                `
+                : ''
+            }
+
+            ${
+              lead.company
+                ? `
+                  <tr>
+                    <td style="${baseEmailStyle} padding: 6px 12px; background: #f1f1f1; font-weight: bold;">Company</td>
+                    <td style="${baseEmailStyle} padding: 6px 12px; border-bottom: 1px solid #ddd;">${escapeHtml(lead.company)}</td>
+                  </tr>
+                `
+                : ''
+            }
+
+            ${
+              lead.industry
+                ? `
+                  <tr>
+                    <td style="${baseEmailStyle} padding: 6px 12px; background: #f1f1f1; font-weight: bold;">Industry</td>
+                    <td style="${baseEmailStyle} padding: 6px 12px; border-bottom: 1px solid #ddd;">${escapeHtml(lead.industry)}</td>
+                  </tr>
+                `
+                : ''
+            }
+
+            ${
+              lead.budget
+                ? `
+                  <tr>
+                    <td style="${baseEmailStyle} padding: 6px 12px; background: #f1f1f1; font-weight: bold;">Budget</td>
+                    <td style="${baseEmailStyle} padding: 6px 12px; border-bottom: 1px solid #ddd;">${escapeHtml(lead.budget)}</td>
+                  </tr>
+                `
+                : ''
+            }
+          </table>
+
+          <p style="${baseEmailStyle} margin-top: 20px;">
+            Thank you,<br />
+            Mawkish Creates
+          </p>
+
+          <p style="${baseEmailStyle} margin-top: 22px; color: #666;">
+            © ${new Date().getFullYear()} Mawkish Creates. From Sri Lanka to the world.
+          </p>
         </div>
       `,
     })
@@ -104,4 +286,7 @@ const sendLeadConfirmation = async (lead) => {
   }
 }
 
-module.exports = { sendLeadNotification, sendLeadConfirmation }
+module.exports = {
+  sendLeadNotification,
+  sendLeadConfirmation,
+}
