@@ -916,7 +916,6 @@ export default function Home() {
         <div className="container">
           <div className="hero-inner">
             <div className="hero-content">
-              <p className="hero-eyebrow"> Your Creative Growth Partner</p>
 
               <h1 className="hero-title" ref={heroTitleRef}>
                 <span className="line-italic">Scaling Businesses</span>
@@ -924,7 +923,7 @@ export default function Home() {
               </h1>
 
               <p className="hero-subtitle" ref={heroSubRef}>
-                We design and execute high-impact campaigns that generate
+                We design and execute solutions that generate
                 qualified leads, grow revenue, and build lasting brands.
               </p>
 
