@@ -49,8 +49,17 @@ const buildRow = (leadData) => {
 
   return fields.map((field) => {
     if (field === 'submittedAt') {
-      return leadData.submittedAt || new Date().toISOString()
-    }
+  return leadData.submittedAt || new Date().toLocaleString('en-LK', {
+    timeZone: 'Asia/Colombo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  })
+}
 
     return formatValue(leadData[field])
   })

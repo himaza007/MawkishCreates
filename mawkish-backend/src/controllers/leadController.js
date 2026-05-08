@@ -20,7 +20,16 @@ const createLead = async (req, res, next) => {
     // Combines form data with extra tracking details
     const leadData = {
       ...req.body,
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date().toLocaleString('en-LK', {
+        timeZone: 'Asia/Colombo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+}),
       ipAddress: req.ip,
       userAgent: req.headers['user-agent'] || '',
     }
