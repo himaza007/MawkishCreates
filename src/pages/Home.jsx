@@ -13,9 +13,15 @@ import '../styles/home.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
+/* ── Mobile detection (module-level, called at runtime) ──── */
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth <= 768
+
 /* ── Lenis Smooth Scroll ─────────────────────────────────── */
 function useLenis() {
   useEffect(() => {
+    // Skip smooth scroll on mobile — native scroll is faster
+    if (isMobile()) return
+
     let lenis
     let rafId
 
@@ -38,40 +44,56 @@ function useLenis() {
   }, [])
 }
 
-/* ── Hero Particle Canvas - Original Hero Layer ───────────── */
+/* ── Hero Particle Canvas ────────────────────────────────── */
 function ParticleCanvas() {
   const canvasRef = useRef(null)
+
   useEffect(() => {
-    if (isMobile()) return          // ← skip on mobile
+    if (isMobile()) return // skip entirely on mobile
+
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     let animId, W, H, particles
     const MOUSE = { x: -9999, y: -9999 }
-    const resize = () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight }
+
+    const resize = () => {
+      W = canvas.width = canvas.offsetWidth
+      H = canvas.height = canvas.offsetHeight
+    }
+
     const rand = (a, b) => Math.random() * (b - a) + a
+
     const init = () => {
       resize()
-      // 90 particles on desktop → 40 on mid-range
+      // Reduce particle count on tablet vs full desktop
       const count = window.innerWidth <= 1024 ? 40 : 90
-      particles = Array.from({ length: count }, () => ({ x: rand(0,W), y: rand(0,H), vx: rand(-0.25,0.25), vy: rand(-0.25,0.25), r: rand(1.5,3) }))
+      particles = Array.from({ length: count }, () => ({
+        x: rand(0, W), y: rand(0, H),
+        vx: rand(-0.25, 0.25), vy: rand(-0.25, 0.25),
+        r: rand(1.5, 3),
+      }))
     }
+
     const draw = () => {
       ctx.clearRect(0, 0, W, H)
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy
         if (p.x < 0 || p.x > W) p.vx *= -1
         if (p.y < 0 || p.y > H) p.vy *= -1
-        const dx = p.x - MOUSE.x, dy = p.y - MOUSE.y, d = Math.sqrt(dx*dx+dy*dy)
-        if (d < 90) { p.x += (dx/d)*1.5; p.y += (dy/d)*1.5 }
+        const dx = p.x - MOUSE.x, dy = p.y - MOUSE.y
+        const d = Math.sqrt(dx * dx + dy * dy)
+        if (d < 90) { p.x += (dx / d) * 1.5; p.y += (dy / d) * 1.5 }
       })
+
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i+1; j < particles.length; j++) {
-          const dx = particles[i].x-particles[j].x, dy = particles[i].y-particles[j].y
-          const dist = Math.sqrt(dx*dx+dy*dy)
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 140) {
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(163,110,247,${(1-dist/140)*0.3})`
+            ctx.strokeStyle = `rgba(163,110,247,${(1 - dist / 140) * 0.3})`
             ctx.lineWidth = 0.8
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
@@ -79,22 +101,52 @@ function ParticleCanvas() {
           }
         }
       }
-      particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(163,110,247,0.65)'; ctx.fill() })
+
+      particles.forEach(p => {
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(163,110,247,0.65)'
+        ctx.fill()
+      })
+
       animId = requestAnimationFrame(draw)
     }
-    const onMove = e => { const r = canvas.getBoundingClientRect(); MOUSE.x = e.clientX-r.left; MOUSE.y = e.clientY-r.top }
+
+    const onMove = e => {
+      const r = canvas.getBoundingClientRect()
+      MOUSE.x = e.clientX - r.left
+      MOUSE.y = e.clientY - r.top
+    }
     const onLeave = () => { MOUSE.x = -9999; MOUSE.y = -9999 }
-    init(); draw()
+
+    // Pause when canvas is off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) { init(); draw() }
+        else cancelAnimationFrame(animId)
+      },
+      { threshold: 0 }
+    )
+    observer.observe(canvas)
+
     window.addEventListener('resize', init)
     canvas.addEventListener('mousemove', onMove)
     canvas.addEventListener('mouseleave', onLeave)
-    return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', init); canvas.removeEventListener('mousemove', onMove); canvas.removeEventListener('mouseleave', onLeave) }
+
+    return () => {
+      cancelAnimationFrame(animId)
+      observer.disconnect()
+      window.removeEventListener('resize', init)
+      canvas.removeEventListener('mousemove', onMove)
+      canvas.removeEventListener('mouseleave', onLeave)
+    }
   }, [])
-  if (isMobile()) return null       // ← render nothing on mobile
+
+  if (isMobile()) return null // render nothing on mobile
   return <canvas ref={canvasRef} className="hero-particle-canvas" aria-hidden="true" />
 }
 
-/* ── Immersive Three.js Galaxy Journey After Hero ─────────── */
+/* ── Immersive Three.js Galaxy Journey ───────────────────── */
 function GalaxyJourney() {
   const wrapRef = useRef(null)
   const mountRef = useRef(null)
@@ -105,7 +157,7 @@ function GalaxyJourney() {
     if (!wrap || !mount) return
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const isMobile = window.innerWidth < 768
+    const mobile = window.innerWidth < 768
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color('#030008')
@@ -114,8 +166,12 @@ function GalaxyJourney() {
     const camera = new THREE.PerspectiveCamera(68, mount.clientWidth / mount.clientHeight, 0.1, 900)
     camera.position.set(0, 3, 54)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8))
+    const renderer = new THREE.WebGLRenderer({
+      antialias: !mobile, // disable antialiasing on mobile
+      alpha: false,
+      powerPreference: 'high-performance',
+    })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1 : 1.8))
     renderer.setSize(mount.clientWidth, mount.clientHeight)
     renderer.outputColorSpace = THREE.SRGBColorSpace
     mount.appendChild(renderer.domElement)
@@ -131,7 +187,8 @@ function GalaxyJourney() {
     const ice = new THREE.Color('#d9ccff')
     const white = new THREE.Color('#ffffff')
 
-    const starCount = isMobile ? 2600 : 7800
+    // Significantly fewer stars on mobile
+    const starCount = mobile ? 1200 : 7800
     const starPositions = new Float32Array(starCount * 3)
     const starColors = new Float32Array(starCount * 3)
 
@@ -150,9 +207,7 @@ function GalaxyJourney() {
       if (Math.random() > 0.88) c.lerp(gold, 0.65)
       if (Math.random() > 0.96) c.lerp(white, 0.9)
 
-      starColors[i3] = c.r
-      starColors[i3 + 1] = c.g
-      starColors[i3 + 2] = c.b
+      starColors[i3] = c.r; starColors[i3 + 1] = c.g; starColors[i3 + 2] = c.b
     }
 
     const starGeometry = new THREE.BufferGeometry()
@@ -172,58 +227,61 @@ function GalaxyJourney() {
     const starField = new THREE.Points(starGeometry, starMaterial)
     universe.add(starField)
 
-    const spiralCount = isMobile ? 1800 : 4600
-    const spiralPositions = new Float32Array(spiralCount * 3)
-    const spiralColors = new Float32Array(spiralCount * 3)
+    // Skip spiral galaxy on mobile
+    let spiral
+    if (!mobile) {
+      const spiralCount = 4600
+      const spiralPositions = new Float32Array(spiralCount * 3)
+      const spiralColors = new Float32Array(spiralCount * 3)
 
-    for (let i = 0; i < spiralCount; i++) {
-      const i3 = i * 3
-      const r = 6 + Math.random() * 92
-      const branch = (i % 5) / 5 * Math.PI * 2
-      const spin = r * 0.24
-      const fuzz = Math.pow(Math.random(), 2.2)
+      for (let i = 0; i < spiralCount; i++) {
+        const i3 = i * 3
+        const r = 6 + Math.random() * 92
+        const branch = (i % 5) / 5 * Math.PI * 2
+        const spin = r * 0.24
+        const fuzz = Math.pow(Math.random(), 2.2)
 
-      spiralPositions[i3] = Math.cos(branch + spin) * r + (Math.random() - 0.5) * 16 * fuzz
-      spiralPositions[i3 + 1] = (Math.random() - 0.5) * 18 * fuzz
-      spiralPositions[i3 + 2] = -120 + Math.sin(branch + spin) * r + (Math.random() - 0.5) * 16 * fuzz
+        spiralPositions[i3] = Math.cos(branch + spin) * r + (Math.random() - 0.5) * 16 * fuzz
+        spiralPositions[i3 + 1] = (Math.random() - 0.5) * 18 * fuzz
+        spiralPositions[i3 + 2] = -120 + Math.sin(branch + spin) * r + (Math.random() - 0.5) * 16 * fuzz
 
-      const c = violet.clone().lerp(ice, Math.random() * 0.45)
-      if (Math.random() > 0.82) c.lerp(gold, 0.5)
+        const c = violet.clone().lerp(ice, Math.random() * 0.45)
+        if (Math.random() > 0.82) c.lerp(gold, 0.5)
 
-      spiralColors[i3] = c.r
-      spiralColors[i3 + 1] = c.g
-      spiralColors[i3 + 2] = c.b
+        spiralColors[i3] = c.r; spiralColors[i3 + 1] = c.g; spiralColors[i3 + 2] = c.b
+      }
+
+      const spiralGeometry = new THREE.BufferGeometry()
+      spiralGeometry.setAttribute('position', new THREE.BufferAttribute(spiralPositions, 3))
+      spiralGeometry.setAttribute('color', new THREE.BufferAttribute(spiralColors, 3))
+
+      const spiralMaterial = new THREE.PointsMaterial({
+        size: 0.42,
+        sizeAttenuation: true,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.82,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+
+      spiral = new THREE.Points(spiralGeometry, spiralMaterial)
+      universe.add(spiral)
     }
-
-    const spiralGeometry = new THREE.BufferGeometry()
-    spiralGeometry.setAttribute('position', new THREE.BufferAttribute(spiralPositions, 3))
-    spiralGeometry.setAttribute('color', new THREE.BufferAttribute(spiralColors, 3))
-
-    const spiralMaterial = new THREE.PointsMaterial({
-      size: 0.42,
-      sizeAttenuation: true,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.82,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    })
-
-    const spiral = new THREE.Points(spiralGeometry, spiralMaterial)
-    universe.add(spiral)
 
     const nebulaTexture = (() => {
       const canvas = document.createElement('canvas')
-      canvas.width = 512
-      canvas.height = 512
+      canvas.width = mobile ? 256 : 512 // smaller texture on mobile
+      canvas.height = mobile ? 256 : 512
       const ctx = canvas.getContext('2d')
-      const gradient = ctx.createRadialGradient(256, 256, 20, 256, 256, 256)
+      const size = canvas.width
+      const gradient = ctx.createRadialGradient(size / 2, size / 2, 20, size / 2, size / 2, size / 2)
       gradient.addColorStop(0, 'rgba(255,255,255,0.95)')
       gradient.addColorStop(0.28, 'rgba(180,120,255,0.45)')
       gradient.addColorStop(0.58, 'rgba(120,60,255,0.18)')
       gradient.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.fillStyle = gradient
-      ctx.fillRect(0, 0, 512, 512)
+      ctx.fillRect(0, 0, size, size)
       return new THREE.CanvasTexture(canvas)
     })()
 
@@ -236,13 +294,19 @@ function GalaxyJourney() {
       depthWrite: false,
     })
 
-    const nebulaSpecs = [
-      [-30, 10, -65, 46, '#7b2ff7', 0.28],
-      [32, -8, -130, 70, '#a36ef7', 0.22],
-      [-44, -12, -210, 84, '#c9a84c', 0.16],
-      [26, 16, -300, 95, '#7cc7ff', 0.14],
-      [0, 0, -390, 125, '#9d5ffa', 0.2],
-    ]
+    // Fewer nebulae on mobile
+    const nebulaSpecs = mobile
+      ? [
+          [-30, 10, -65, 46, '#7b2ff7', 0.28],
+          [0, 0, -390, 125, '#9d5ffa', 0.2],
+        ]
+      : [
+          [-30, 10, -65, 46, '#7b2ff7', 0.28],
+          [32, -8, -130, 70, '#a36ef7', 0.22],
+          [-44, -12, -210, 84, '#c9a84c', 0.16],
+          [26, 16, -300, 95, '#7cc7ff', 0.14],
+          [0, 0, -390, 125, '#9d5ffa', 0.2],
+        ]
 
     nebulaSpecs.forEach(([x, y, z, scale, color, opacity]) => {
       const sprite = new THREE.Sprite(nebulaMaterial.clone())
@@ -259,8 +323,10 @@ function GalaxyJourney() {
       group.userData.name = name
       group.userData.targetScale = 1
 
+      // Simpler geometry on mobile
+      const segments = mobile ? 24 : 48
       const planet = new THREE.Mesh(
-        new THREE.SphereGeometry(size, 48, 48),
+        new THREE.SphereGeometry(size, segments, segments),
         new THREE.MeshStandardMaterial({ color, roughness: 0.72, metalness: 0.05, emissive, emissiveIntensity: 0.16 })
       )
       group.add(planet)
@@ -276,7 +342,7 @@ function GalaxyJourney() {
       glow.scale.set(size * 7.5, size * 7.5, 1)
       group.add(glow)
 
-      if (ring) {
+      if (ring && !mobile) { // skip rings on mobile
         const ringMesh = new THREE.Mesh(
           new THREE.RingGeometry(size * 1.38, size * 2.06, 96),
           new THREE.MeshBasicMaterial({ color: ring, transparent: true, opacity: 0.32, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
@@ -304,18 +370,21 @@ function GalaxyJourney() {
       'Web Development': planetList[3],
     }
 
-    const moonGeometry = new THREE.SphereGeometry(0.55, 18, 18)
-    const moonMaterial = new THREE.MeshBasicMaterial({ color: '#ffffff' })
+    // Skip moons on mobile
+    if (!mobile) {
+      const moonGeometry = new THREE.SphereGeometry(0.55, 18, 18)
+      const moonMaterial = new THREE.MeshBasicMaterial({ color: '#ffffff' })
 
-    for (let i = 0; i < 24; i++) {
-      const moon = new THREE.Mesh(moonGeometry, moonMaterial.clone())
-      const z = -40 - i * 16
-      const angle = i * 1.7
-      const r = 10 + (i % 4) * 4
-      moon.position.set(Math.cos(angle) * r, Math.sin(angle) * r * 0.45, z)
-      moon.material.transparent = true
-      moon.material.opacity = 0.45
-      planets.add(moon)
+      for (let i = 0; i < 24; i++) {
+        const moon = new THREE.Mesh(moonGeometry, moonMaterial.clone())
+        const z = -40 - i * 16
+        const angle = i * 1.7
+        const r = 10 + (i % 4) * 4
+        moon.position.set(Math.cos(angle) * r, Math.sin(angle) * r * 0.45, z)
+        moon.material.transparent = true
+        moon.material.opacity = 0.45
+        planets.add(moon)
+      }
     }
 
     const makeConstellation = (base, points, color = '#c9a84c', sectionName = 'intro') => {
@@ -356,6 +425,7 @@ function GalaxyJourney() {
     let scrollVelocityDecay = 0
 
     const onPointerMove = e => {
+      if (mobile) return // no cursor tracking on mobile
       cursor.x = (e.clientX / window.innerWidth - 0.5) * 2
       cursor.y = (e.clientY / window.innerHeight - 0.5) * 2
     }
@@ -364,7 +434,7 @@ function GalaxyJourney() {
       const current = window.scrollY
       scrollVelocity = Math.abs(current - lastScrollY)
       lastScrollY = current
-      scrollVelocityDecay = Math.min(scrollVelocity * 0.002, isMobile ? 0.6 : 2)
+      scrollVelocityDecay = Math.min(scrollVelocity * 0.002, mobile ? 0.4 : 2)
     }
 
     const onResize = () => {
@@ -378,73 +448,77 @@ function GalaxyJourney() {
     window.addEventListener('resize', onResize)
 
     const cleanupHoverHandlers = []
-    const cards = document.querySelectorAll('.service-card')
 
-    cards.forEach(card => {
-      const onEnter = () => {
-        const title = card.querySelector('.service-title')?.innerText
-        const planet = planetMap[title]
-        if (!planet) return
+    if (!mobile) {
+      const cards = document.querySelectorAll('.service-card')
 
-        serviceFocus.active = true
-        serviceFocus.x = planet.position.x * 0.28
-        serviceFocus.y = planet.position.y * 0.28
-        planet.userData.targetScale = 1.22
-        card.classList.add('service-card--cosmic-focus')
-      }
+      cards.forEach(card => {
+        const onEnter = () => {
+          const title = card.querySelector('.service-title')?.innerText
+          const planet = planetMap[title]
+          if (!planet) return
+          serviceFocus.active = true
+          serviceFocus.x = planet.position.x * 0.28
+          serviceFocus.y = planet.position.y * 0.28
+          planet.userData.targetScale = 1.22
+          card.classList.add('service-card--cosmic-focus')
+        }
 
-      const onLeave = () => {
-        serviceFocus.active = false
-        serviceFocus.x = 0
-        serviceFocus.y = 0
-        Object.values(planetMap).forEach(planet => {
-          planet.userData.targetScale = 1
+        const onLeave = () => {
+          serviceFocus.active = false
+          serviceFocus.x = 0
+          serviceFocus.y = 0
+          Object.values(planetMap).forEach(p => { p.userData.targetScale = 1 })
+          card.classList.remove('service-card--cosmic-focus')
+        }
+
+        card.addEventListener('mouseenter', onEnter)
+        card.addEventListener('mouseleave', onLeave)
+        card.addEventListener('focus', onEnter)
+        card.addEventListener('blur', onLeave)
+        cleanupHoverHandlers.push(() => {
+          card.removeEventListener('mouseenter', onEnter)
+          card.removeEventListener('mouseleave', onLeave)
+          card.removeEventListener('focus', onEnter)
+          card.removeEventListener('blur', onLeave)
         })
-        card.classList.remove('service-card--cosmic-focus')
-      }
-
-      card.addEventListener('mouseenter', onEnter)
-      card.addEventListener('mouseleave', onLeave)
-      card.addEventListener('focus', onEnter)
-      card.addEventListener('blur', onLeave)
-
-      cleanupHoverHandlers.push(() => {
-        card.removeEventListener('mouseenter', onEnter)
-        card.removeEventListener('mouseleave', onLeave)
-        card.removeEventListener('focus', onEnter)
-        card.removeEventListener('blur', onLeave)
       })
-    })
+    }
 
+    // Skip audio on mobile
     let ambientAudio = null
     let sparkleAudio = null
 
-    try {
-      ambientAudio = new Audio('./space-ambient.mp3')
-      ambientAudio.loop = true
-      ambientAudio.volume = 0.09
-      sparkleAudio = new Audio('/sounds/sparkle.mp3')
-      sparkleAudio.volume = 0.18
-    } catch {
-      ambientAudio = null
-      sparkleAudio = null
-    }
+    if (!mobile) {
+      try {
+        ambientAudio = new Audio('./space-ambient.mp3')
+        ambientAudio.loop = true
+        ambientAudio.volume = 0.09
+        sparkleAudio = new Audio('/sounds/sparkle.mp3')
+        sparkleAudio.volume = 0.18
+      } catch {
+        ambientAudio = null
+        sparkleAudio = null
+      }
 
-    const startAmbient = () => {
-      ambientAudio?.play().catch(() => {})
-    }
+      const startAmbient = () => ambientAudio?.play().catch(() => {})
+      const playSparkle = () => {
+        if (!sparkleAudio) return
+        sparkleAudio.currentTime = 0
+        sparkleAudio.play().catch(() => {})
+      }
 
-    const playSparkle = () => {
-      if (!sparkleAudio) return
-      sparkleAudio.currentTime = 0
-      sparkleAudio.play().catch(() => {})
+      window.addEventListener('click', startAmbient, { once: true })
+      document.querySelectorAll('.service-card').forEach(card => card.addEventListener('mouseenter', playSparkle))
     }
-
-    window.addEventListener('click', startAmbient, { once: true })
-    cards.forEach(card => card.addEventListener('mouseenter', playSparkle))
 
     const clock = new THREE.Clock()
     let animId
+
+    // Throttle render loop on mobile to ~30fps
+    let lastFrame = 0
+    const targetFPS = mobile ? 30 : 60
+    const frameInterval = 1000 / targetFPS
 
     const getProgress = () => {
       const rect = wrap.getBoundingClientRect()
@@ -455,11 +529,9 @@ function GalaxyJourney() {
 
     const getActiveSectionName = () => {
       const sections = document.querySelectorAll('.galaxy-panel')
-
       for (const section of sections) {
         const rect = section.getBoundingClientRect()
         const isActive = rect.top < window.innerHeight * 0.55 && rect.bottom > window.innerHeight * 0.45
-
         if (isActive) {
           if (section.classList.contains('intro-section')) return 'intro'
           if (section.classList.contains('services-section')) return 'services'
@@ -468,18 +540,24 @@ function GalaxyJourney() {
           return 'cta'
         }
       }
-
       return null
     }
 
-    const animate = () => {
+    const animate = (timestamp = 0) => {
+      // Throttle on mobile
+      if (mobile && timestamp - lastFrame < frameInterval) {
+        animId = requestAnimationFrame(animate)
+        return
+      }
+      lastFrame = timestamp
+
       const elapsed = clock.getElapsedTime()
       const progress = getProgress()
       const eased = progress * progress * (3 - 2 * progress)
       const activeSection = getActiveSectionName()
 
       scrollVelocityDecay *= 0.92
-      const warp = Math.min(scrollVelocityDecay, isMobile ? 0.6 : 2)
+      const warp = Math.min(scrollVelocityDecay, mobile ? 0.4 : 2)
 
       starMaterial.size = 0.28 + warp * 0.36
       starMaterial.opacity = Math.min(1, 0.92 + warp * 0.06)
@@ -489,32 +567,42 @@ function GalaxyJourney() {
       const driftX = Math.sin(eased * Math.PI * 2.2) * 9
       const driftY = Math.cos(eased * Math.PI * 1.7) * 5
 
-      cameraOffset.x += ((serviceFocus.active ? serviceFocus.x : 0) - cameraOffset.x) * 0.06
-      cameraOffset.y += ((serviceFocus.active ? serviceFocus.y : 0) - cameraOffset.y) * 0.06
+      if (!mobile) {
+        cameraOffset.x += ((serviceFocus.active ? serviceFocus.x : 0) - cameraOffset.x) * 0.06
+        cameraOffset.y += ((serviceFocus.active ? serviceFocus.y : 0) - cameraOffset.y) * 0.06
+      }
 
       camera.position.z += (targetZ - camera.position.z) * 0.08
-      camera.position.x += (driftX + cursor.x * 3.5 + cameraOffset.x - camera.position.x) * 0.045
-      camera.position.y += (driftY - cursor.y * 2.2 + cameraOffset.y - camera.position.y) * 0.045
-      camera.rotation.z += ((Math.sin(eased * Math.PI * 3) * 0.055) - camera.rotation.z) * 0.05
+      camera.position.x += (driftX + cursor.x * 3.5 + cameraOffset.x - camera.position.x) * (mobile ? 0.02 : 0.045)
+      camera.position.y += (driftY - cursor.y * 2.2 + cameraOffset.y - camera.position.y) * (mobile ? 0.02 : 0.045)
+
+      if (!mobile) {
+        camera.rotation.z += ((Math.sin(eased * Math.PI * 3) * 0.055) - camera.rotation.z) * 0.05
+      }
+
       camera.lookAt(0, 0, camera.position.z - 42)
 
       starField.rotation.z = elapsed * 0.01 + eased * 0.55
-      spiral.rotation.y = elapsed * 0.018 + eased * 1.8
-      spiral.rotation.x = Math.sin(elapsed * 0.14) * 0.08
+
+      if (spiral) {
+        spiral.rotation.y = elapsed * 0.018 + eased * 1.8
+        spiral.rotation.x = Math.sin(elapsed * 0.14) * 0.08
+      }
 
       planetList.forEach((planet, index) => {
         planet.rotation.y += 0.004 + index * 0.001
-        planet.rotation.x = Math.sin(elapsed * 0.2 + index) * 0.05
+        if (!mobile) planet.rotation.x = Math.sin(elapsed * 0.2 + index) * 0.05
         const targetScale = planet.userData.targetScale || 1
         planet.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.08)
       })
 
-      planets.children.forEach((child, index) => {
-        if (child.geometry === moonGeometry) {
+      if (!mobile) {
+        planets.children.forEach((child, index) => {
+          if (child.isMesh && !child.geometry?.type?.includes('Sphere')) return
           child.position.x += Math.sin(elapsed + index) * 0.003
           child.position.y += Math.cos(elapsed * 0.8 + index) * 0.003
-        }
-      })
+        })
+      }
 
       constellationList.forEach((group, index) => {
         const isActive = group.userData.section === activeSection
@@ -543,37 +631,25 @@ function GalaxyJourney() {
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
-      window.removeEventListener('click', startAmbient)
-
       cleanupHoverHandlers.forEach(cleanup => cleanup())
-      cards.forEach(card => card.removeEventListener('mouseenter', playSparkle))
-
       ambientAudio?.pause()
       sparkleAudio?.pause()
-
       starGeometry.dispose()
       starMaterial.dispose()
-      spiralGeometry.dispose()
-      spiralMaterial.dispose()
       nebulaTexture.dispose()
       nebulaMaterial.dispose()
-      moonGeometry.dispose()
-      moonMaterial.dispose()
-
       planetList.forEach(group => {
         group.traverse(child => {
           if (child.geometry) child.geometry.dispose()
           if (child.material) child.material.dispose()
         })
       })
-
       constellationList.forEach(group => {
         group.traverse(child => {
           if (child.geometry) child.geometry.dispose()
           if (child.material) child.material.dispose()
         })
       })
-
       renderer.dispose()
       renderer.domElement.remove()
     }
@@ -641,7 +717,6 @@ function PhotoStrip() {
       cards.forEach((card, i) => {
         const delay = i * 0.2
         const p = Math.max(0, Math.min(1, (progress - delay) / (0.8 - delay)))
-
         card.style.transform = `translateX(${p * -300}px) rotate(${card.dataset.rotate})`
         card.style.opacity = Math.max(0, 1 - p * 1.5)
         card.style.transition = 'none'
@@ -649,7 +724,6 @@ function PhotoStrip() {
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
-
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -667,7 +741,7 @@ function PhotoStrip() {
             opacity: 1,
           }}
         >
-          <img src={photo.src} alt="" />
+          <img src={photo.src} alt="" loading="lazy" />
         </div>
       ))}
     </div>
@@ -841,13 +915,13 @@ export default function Home() {
   return (
     <main className="home-page">
       {/* ════════════════════════════════════════════════════
-          HERO - left untouched in structure and styling
+          HERO
       ═════════════════════════════════════════════════════ */}
       <section className="hero" aria-label="Hero">
-      <div className="fluid-bg" aria-hidden="true">
-        <div className="fluid-blob fluid-blob-1" />
-        <div className="fluid-blob fluid-blob-2" />
-      </div>
+        <div className="fluid-bg" aria-hidden="true">
+          <div className="fluid-blob fluid-blob-1" />
+          <div className="fluid-blob fluid-blob-2" />
+        </div>
 
         <div className="hero-bg-orb hero-bg-orb-1" aria-hidden="true" />
         <div className="hero-bg-orb hero-bg-orb-2" aria-hidden="true" />
@@ -861,7 +935,6 @@ export default function Home() {
         <div className="container">
           <div className="hero-inner">
             <div className="hero-content">
-
               <h1 className="hero-title" ref={heroTitleRef}>
                 <span className="line-italic">Scaling Businesses</span>
                 <span className="line-accent">Through Strategy</span>
@@ -888,7 +961,7 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          AFTER HERO - immersive Three.js galaxy journey
+          AFTER HERO - Three.js galaxy journey
       ═════════════════════════════════════════════════════ */}
       <section className="galaxy-journey">
         <GalaxyJourney />
@@ -1047,7 +1120,7 @@ export default function Home() {
                   {testimonials.slice(0, 3).map((item, index) => (
                     <article key={item._id || index} className="testimonial-card">
                       <div className="testimonial-stars">★★★★★</div>
-                      <span className="testimonial-quote-mark">“</span>
+                      <span className="testimonial-quote-mark">"</span>
 
                       <p className="testimonial-text">
                         {item.quote || item.text || item.message}
@@ -1091,7 +1164,7 @@ export default function Home() {
                 </h2>
 
                 <p className="home-cta-desc">
-                  Let’s create a growth system that attracts the right audience,
+                  Let's create a growth system that attracts the right audience,
                   builds real trust, and turns attention into measurable results.
                 </p>
 
