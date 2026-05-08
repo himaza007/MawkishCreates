@@ -154,54 +154,26 @@
 }
 
 @keyframes starPulse {
-  0%, 100% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.7);
-  }
+  0%, 100% { opacity: 0.35; transform: scale(1);   }
+  50%       { opacity: 1;    transform: scale(1.7); }
 }
 
 @keyframes lineDrift {
-  from {
-    stroke-dashoffset: 0;
-  }
-  to {
-    stroke-dashoffset: -12;
-  }
+  from { stroke-dashoffset: 0;   }
+  to   { stroke-dashoffset: -12; }
 }
 
 @keyframes auraBreath {
-  0%, 100% {
-    transform: scale(0.92);
-    opacity: 0.65;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 1;
-  }
+  0%, 100% { transform: scale(0.92); opacity: 0.65; }
+  50%       { transform: scale(1.12); opacity: 1;    }
 }
 
 @media (max-width: 768px) {
-  .logo-stage {
-    width: 130px;
-    height: 130px;
-  }
+  .logo-stage { width: 130px; height: 130px; }
 
-  .loader-logo-img {
-    width: 86px;
-    height: 86px;
-  }
+  .loader-logo-img { width: 86px; height: 86px; }
 
-  .fragment-grid {
-    width: 96px;
-    height: 96px;
-  }
+  .fragment-grid { width: 96px; height: 96px; }
 
-  .loader-tagline {
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-  }
+  .loader-tagline { font-size: 0.62rem; letter-spacing: 0.18em; }
 }

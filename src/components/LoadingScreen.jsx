@@ -5,10 +5,10 @@ import './LoadingScreen.css'
 const fragments = Array.from({ length: 36 })
 
 export default function LoadingScreen({ onDone }) {
-  const loaderRef = useRef(null)
-  const logoRef = useRef(null)
+  const loaderRef    = useRef(null)
+  const logoRef      = useRef(null)
   const fragmentsRef = useRef([])
-  const starsRef = useRef([])
+  const starsRef     = useRef([])
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -21,66 +21,44 @@ export default function LoadingScreen({ onDone }) {
       { opacity: 0, scale: 0 },
       {
         opacity: () => gsap.utils.random(0.35, 1),
-        scale: 1,
+        scale:   1,
         duration: 0.9,
-        stagger: 0.015,
+        stagger:  0.015,
       }
     )
 
     tl.fromTo(
       logoRef.current,
       { opacity: 0, scale: 0.85, filter: 'blur(12px)' },
-      {
-        opacity: 1,
-        scale: 1,
-        filter: 'blur(0px)',
-        duration: 1,
-      },
+      { opacity: 1, scale: 1,    filter: 'blur(0px)',  duration: 1 },
       '-=0.5'
     )
 
     tl.fromTo(
       '.loader-title span',
       { y: '120%', opacity: 0 },
-      {
-        y: '0%',
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.08,
-      },
+      { y: '0%',   opacity: 1, duration: 0.8, stagger: 0.08 },
       '-=0.5'
     )
 
     tl.to({}, { duration: 0.65 })
 
-    tl.to(
-      logoRef.current,
-      {
-        opacity: 0,
-        scale: 0.92,
-        filter: 'blur(10px)',
-        duration: 0.45,
-        ease: 'power2.in',
-      }
-    )
+    tl.to(logoRef.current, {
+      opacity:  0,
+      scale:    0.92,
+      filter:   'blur(10px)',
+      duration: 0.45,
+      ease:     'power2.in',
+    })
 
     tl.fromTo(
       fragmentsRef.current,
+      { opacity: 0, scale: 0.4, x: 0, y: 0, rotate: 0 },
       {
-        opacity: 0,
-        scale: 0.4,
-        x: 0,
-        y: 0,
-        rotate: 0,
-      },
-      {
-        opacity: 1,
-        scale: 1,
+        opacity:  1,
+        scale:    1,
         duration: 0.25,
-        stagger: {
-          amount: 0.18,
-          from: 'center',
-        },
+        stagger:  { amount: 0.18, from: 'center' },
       },
       '-=0.35'
     )
@@ -88,17 +66,14 @@ export default function LoadingScreen({ onDone }) {
     tl.to(
       fragmentsRef.current,
       {
-        x: () => gsap.utils.random(-180, 180),
-        y: () => gsap.utils.random(-160, 220),
-        rotate: () => gsap.utils.random(-90, 90),
-        scale: () => gsap.utils.random(0.1, 0.7),
-        opacity: 0,
+        x:        () => gsap.utils.random(-180, 180),
+        y:        () => gsap.utils.random(-160, 220),
+        rotate:   () => gsap.utils.random(-90, 90),
+        scale:    () => gsap.utils.random(0.1, 0.7),
+        opacity:  0,
         duration: 1.1,
-        ease: 'power4.inOut',
-        stagger: {
-          amount: 0.4,
-          from: 'center',
-        },
+        ease:     'power4.inOut',
+        stagger:  { amount: 0.4, from: 'center' },
       },
       'fragment'
     )
@@ -106,36 +81,23 @@ export default function LoadingScreen({ onDone }) {
     tl.to(
       starsRef.current,
       {
-        opacity: 0,
-        scale: 0,
+        opacity:  0,
+        scale:    0,
         duration: 0.8,
-        stagger: {
-          amount: 0.35,
-          from: 'random',
-        },
+        stagger:  { amount: 0.35, from: 'random' },
       },
       'fragment+=0.1'
     )
 
     tl.to(
       '.loader-title',
-      {
-        opacity: 0,
-        y: -20,
-        filter: 'blur(8px)',
-        duration: 0.5,
-      },
+      { opacity: 0, y: -20, filter: 'blur(8px)', duration: 0.5 },
       'fragment+=0.1'
     )
 
     tl.to(
       loaderRef.current,
-      {
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.inOut',
-        pointerEvents: 'none',
-      },
+      { opacity: 0, duration: 0.7, ease: 'power2.inOut', pointerEvents: 'none' },
       '-=0.2'
     )
 
@@ -154,9 +116,9 @@ export default function LoadingScreen({ onDone }) {
             ref={el => (starsRef.current[i] = el)}
             className="star"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              '--size': `${Math.random() * 3 + 1}px`,
+              left:    `${Math.random() * 100}%`,
+              top:     `${Math.random() * 100}%`,
+              '--size':  `${Math.random() * 3 + 1}px`,
               '--delay': `${Math.random() * 2}s`,
             }}
           />
@@ -189,6 +151,11 @@ export default function LoadingScreen({ onDone }) {
               />
             ))}
           </div>
+        </div>
+
+        <div className="loader-title">
+          <span>Mawkish</span>
+          <span>Creates</span>
         </div>
 
         <p className="loader-tagline">A constellation of creative systems</p>
