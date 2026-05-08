@@ -1,16 +1,13 @@
-const express  = require('express')
-const helmet   = require('helmet')
-const cors     = require('cors')
-const morgan   = require('morgan')
-const logger   = require('./utils/logger')
+const express = require('express')
+const helmet = require('helmet')
+const cors = require('cors')
+const morgan = require('morgan')
 
-const leadRoutes        = require('./routes/leadRoutes')
-const portfolioRoutes   = require('./routes/portfolioRoutes')
-const caseStudyRoutes   = require('./routes/caseStudyRoutes')
-const testimonialRoutes = require('./routes/testimonialRoutes')
-const authRoutes        = require('./routes/authRoutes')
-const { apiLimiter }    = require('./middleware/rateLimiter')
+const logger = require('./utils/logger')
+const leadRoutes = require('./routes/leadRoutes')
+const { apiLimiter } = require('./middleware/rateLimiter')
 const { errorHandler, notFound } = require('./middleware/errorHandler')
+
 
 const app = express()
 
@@ -20,7 +17,7 @@ app.use(helmet())
 /* ── CORS ─────────────────────────────────────────────────── */
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173')
   .split(',')
-  .map(o => o.trim())
+  .map(origin => origin.trim())
 
 app.use(cors({
   origin: (origin, cb) => {
@@ -29,8 +26,8 @@ app.use(cors({
     cb(new Error(`CORS blocked: ${origin}`))
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
 }))
 
 /* ── Body parsing ─────────────────────────────────────────── */
@@ -51,17 +48,13 @@ app.use('/api', apiLimiter)
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
-    env:    process.env.NODE_ENV,
-    time:   new Date().toISOString(),
+    env: process.env.NODE_ENV || 'development',
+    time: new Date().toISOString(),
   })
 })
 
 /* ── API Routes ───────────────────────────────────────────── */
-app.use('/api/auth',          authRoutes)
-app.use('/api/leads',         leadRoutes)
-app.use('/api/portfolio',     portfolioRoutes)
-app.use('/api/case-studies',  caseStudyRoutes)
-app.use('/api/testimonials',  testimonialRoutes)
+app.use('/api/leads', leadRoutes)
 
 /* ── 404 + Error handler ──────────────────────────────────── */
 app.use(notFound)

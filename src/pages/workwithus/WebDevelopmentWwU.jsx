@@ -214,9 +214,13 @@ function HeroTitle() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const split = new SplitType(el, { types: 'chars,words' })
-    gsap.set(split.chars, { y: 80, opacity: 0, rotateX: -45 })
-    gsap.to(split.chars, { y: 0, opacity: 1, rotateX: 0, duration: 0.9, ease: 'power4.out', stagger: { each: 0.025, from: 'start' }, delay: 0.3 })
+    // Change to lines only — splitting chars breaks gradient on <em>
+    const split = new SplitType(el, { types: 'lines' })
+    gsap.set(split.lines, { y: 80, opacity: 0 })
+    gsap.to(split.lines, { 
+      y: 0, opacity: 1, duration: 0.9, ease: 'power4.out', 
+      stagger: 0.12, delay: 0.3 
+    })
     return () => split.revert()
   }, [])
   return (
@@ -855,19 +859,6 @@ export default function WebDevelopmentWwU() {
       </section>
 
       {/* CTA band */}
-      <section className="wd-cta-band">
-        <div className="container">
-          <div className="wd-cta-band-inner">
-            <TextReveal tag="h2" className="wd-cta-band-heading">Ready to engineer your next digital presence?</TextReveal>
-            <FadeUp delay={0.15}>
-              <a href="#get-started" className="wd-btn-primary wd-btn-large">
-                Start a Project
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </a>
-            </FadeUp>
-          </div>
-        </div>
-      </section>
 
       {/* Custom form */}
       <WebDevInquiryForm />

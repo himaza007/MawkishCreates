@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.local
+dist/
+.DS_Store
+
+mawkish-backend/node_modules/
+mawkish-backend/.env
+mawkish-backend/logs/*.log
