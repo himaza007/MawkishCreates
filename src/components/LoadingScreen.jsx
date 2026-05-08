@@ -153,11 +153,6 @@ export default function LoadingScreen({ onDone }) {
           </div>
         </div>
 
-        <div className="loader-title">
-          <span>Mawkish</span>
-          <span>Creates</span>
-        </div>
-
         <p className="loader-tagline">A constellation of creative systems</p>
       </div>
     </div>
