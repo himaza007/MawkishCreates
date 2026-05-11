@@ -52,7 +52,7 @@ const SERVICE_FIELDS = {
     'industry',
     'objective',
     'geography',
-    'timing',
+    'phone',
     'budget',
     'event',
     'email',
