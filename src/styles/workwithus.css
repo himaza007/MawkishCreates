@@ -1,10 +1,11 @@
+/* ============================================================
+   Work With Us Page — Mawkish Creates (Redesigned)
+   ============================================================ */
+
+/* ── Hero ────────────────────────────────────────────────── */
 .wwu-hero {
   position: relative;
   background: var(--black);
-  background-image: url('/WorkwithUs-hero-Dv-StQno.webp');  /* ← add this */
-  background-size: cover;                         /* ← add this */
-  background-position: center center;             /* ← add this */
-  background-repeat: no-repeat;                   /* ← add this */
   min-height: 100vh;
   display: flex;
   align-items: stretch;
@@ -14,12 +15,15 @@
 /* Subtle purple glow at centre-right */
 .wwu-hero-glow {
   position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.606) 0%, rgba(0, 0, 0, 0.248) 100%),
-    linear-gradient(135deg, rgba(50, 15, 106, 0.586) 0%, transparent 60%);
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,47,247,0.18) 0%, transparent 65%);
+  top: 50%;
+  right: -100px;
+  transform: translateY(-50%);
   pointer-events: none;
-  z-index: 1;
+  filter: blur(60px);
 }
 
 /* Container as a full-height flex column */
@@ -36,7 +40,6 @@
 
 /* Top eyebrow bar */
 .wwu-hero-topbar {
-  padding-top: 2%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -346,7 +349,6 @@
   background: linear-gradient(90deg, transparent, rgba(123,47,247,0.04), transparent);
   opacity: 0;
   transition: opacity var(--transition-slow);
-  pointer-events: none;  /* ← add this line */
 }
 
 .wwu-row:hover::before {
@@ -449,6 +451,35 @@
   line-height: 1.75;
   font-weight: 300;
   max-width: 340px;
+  margin-bottom: var(--space-4);
+}
+
+/* Plan tier pills */
+.wwu-row-plans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.wwu-row-plan-pill {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--row-accent, var(--purple-400));
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.03);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.wwu-row:hover .wwu-row-plan-pill {
+  border-color: var(--row-accent, var(--purple-400));
+  background: rgba(123,47,247,0.08);
 }
 
 /* Features */
@@ -523,8 +554,19 @@
 }
 
 .wwu-row-cta {
-  position: relative;
-  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  white-space: nowrap;
 }
 
 .wwu-row-cta svg {
@@ -760,3 +802,4 @@
     border-top: none;
   }
 }
+
