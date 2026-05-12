@@ -15,7 +15,6 @@ const services = [
     label: 'Lead Generation',
     tagline: 'Fill your pipeline.',
     desc: 'Precision-engineered systems that attract and deliver high-quality leads directly into your pipeline — consistently, month after month.',
-    // Reflects the 3 plans: Launch / Accelerate / Dominate
     highlights: [
       'Up to 150+ leads/month (Accelerate plan)',
       'Multi-platform ad campaigns',
@@ -33,12 +32,12 @@ const services = [
     Icon: IconSmartphone,
     label: 'Social Media',
     tagline: 'Own the feed.',
-    // Two paths: Done For You + Coaching
     desc: 'Two ways to work with us — fully managed social media or expert coaching to build your own in-house capability.',
     highlights: [
-    ['Off the Shelf: strategy, editing, posting & growth', 
-    'Tailor Made: on-site filming & high-production content',
-    'Growth Accelerator: frameworks, systems & live sessions',]    ],
+      'Off the Shelf: strategy, editing, posting & growth', 
+      'Tailor Made: on-site filming & high-production content',
+      'Growth Accelerator: frameworks, systems & live sessions',
+    ]    ,
     metric: '5×',
     metricLabel: 'Avg Engagement Lift',
     accentColor: '#e879b0',
