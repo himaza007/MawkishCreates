@@ -195,10 +195,6 @@ export default function WorkWithUs() {
         <div className="wwu-hero-glow" aria-hidden="true" />
 
         <div className="container wwu-hero-container">
-          <div className="wwu-hero-topbar">
-            <span className="wwu-hero-eyebrow">— Let's Collaborate</span>
-            <span className="wwu-hero-eyebrow-right">Mawkish Creates · 2025</span>
-          </div>
 
           <div className="wwu-hero-title-block">
             <h1 className="wwu-hero-title">

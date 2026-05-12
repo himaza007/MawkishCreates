@@ -6,6 +6,10 @@
 .wwu-hero {
   position: relative;
   background: var(--black);
+  background-image: url('/WorkwithUs-hero.png');  /* ← add this */
+  background-size: cover;                         /* ← add this */
+  background-position: center center;             /* ← add this */
+  background-repeat: no-repeat;                   /* ← add this */
   min-height: 100vh;
   display: flex;
   align-items: stretch;
@@ -545,6 +549,7 @@
 }
 
 .wwu-row-metric-label {
+  padding-top: 2%;
   font-family: var(--font-ui);
   font-size: var(--text-xs);
   letter-spacing: 0.1em;
