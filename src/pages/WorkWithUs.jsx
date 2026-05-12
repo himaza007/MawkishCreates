@@ -40,9 +40,9 @@ const services = [
     ],
     metric: '5×',
     metricLabel: 'Avg Engagement Lift',
-    accentColor: '#c9a84c',
+    accentColor: '#e879b0',
     to: '/work-with-us/social-media-management',
-    plans: ['Done For You', 'Coaching'],
+    plans: ['Off the Shelf', 'Tailor Made', 'Growth Accelerator'],
   },
   {
     index: '03',
@@ -59,16 +59,16 @@ const services = [
     ],
     metric: '3×',
     metricLabel: 'Attendance Growth',
-    accentColor: '#e879b0',
+    accentColor: '#c9a84c',
     to: '/work-with-us/events',
     plans: ['Single Event', 'Event Series', 'Annual Partner'],
   },
   {
     index: '04',
     Icon: IconGlobe,
-    label: 'Web Development',
+    label: 'Digital Solutions',
     tagline: 'Make it unforgettable.',
-    desc: 'We design and develop high-performance websites that don\'t just look good — engineered to convert, perform, and grow with your business.',
+    desc: 'We design and develop high-performance digital solutions that don\'t just look good; engineered to convert, perform, and grow with your business.',
     // Reflects: Starter Websites / Business Websites / E-Commerce Solutions
     highlights: [
       'Starter to fully custom builds',
