@@ -1,16 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useScrollReveal } from '../hooks/useAnimations'
 import {
   IconTarget, IconEye,
   IconZap, IconSearch, IconUsers, IconBarChart, IconGlobe, IconAward,
-  IconHeart,
+  IconMail, IconPhone,
 } from '../components/Icons'
-import {
-  useScrollReveal,
-  useGsapReveal,
-} from '../hooks/useAnimations'
 import '../styles/about.css'
 
+/* ── Data ──────────────────────────────────────────────────── */
 const pillars = [
   { title: 'Results First',      desc: 'Every strategy, every campaign, every decision is evaluated by one standard: does it generate measurable results for our clients?' },
   { title: 'Data-Driven',        desc: 'We let data guide our creative decisions. Every campaign is backed by research, tested, and continuously optimised.' },
@@ -27,298 +23,156 @@ const missionCards = [
   {
     Icon: IconEye,
     title: 'Our Vision',
-    text: 'To replace fragmented brand positioning with integrated growth systems.',
+    text: 'To replace fragmented brand positioning with integrated growth systems that compound over time.',
   },
 ]
 
 const whyCards = [
   { Icon: IconZap,      title: 'Speed to Results',      desc: 'Our streamlined approach gets campaigns live and generating results faster than traditional agency timelines.' },
   { Icon: IconSearch,   title: 'Precision Targeting',   desc: 'Advanced audience segmentation ensures your message reaches the exact people most likely to convert.' },
-  { Icon: IconUsers,    title: 'True Partnership',       desc: "We embed ourselves in your business goals, acting as a dedicated marketing partner rather than a vendor." },
+  { Icon: IconUsers,    title: 'True Partnership',       desc: 'We embed ourselves in your business goals, acting as a dedicated marketing partner rather than a vendor.' },
   { Icon: IconBarChart, title: 'Transparent Reporting', desc: 'Clear, honest reporting with no vanity metrics. You always know exactly what your investment is doing.' },
   { Icon: IconGlobe,    title: 'Full-Stack Marketing',  desc: 'From strategy to execution, creative to analytics — one team handles everything seamlessly.' },
   { Icon: IconAward,    title: 'Proven Track Record',   desc: 'Over 200 businesses scaled. Our portfolio speaks for itself with real, verifiable results.' },
 ]
 
-const tributes = [
-  { name: 'Harith Malick',    role: 'Brother',  note: 'For inspiring the name behind this vision.' },
-  { name: 'M J M Malick',    role: 'Father',   note: 'For the sacrifices that made this journey possible.' },
-  { name: 'Our Mother',       role: 'Mother',   note: 'For the resilience and possibility she brought into our lives.' },
+const divisionHeads = [
+  {
+    name: 'Himaza Zahara',
+    role: 'Head of Lead Generation & Digital Solutions',
+    division: 'Lead Gen & Digital Solutions',
+    email: 'himaza@mawkishcreates.com',
+    phone: '+94 XX XXX XXXX',
+    desc: 'Driving precision lead pipelines and end-to-end digital solutions for brands that demand measurable growth.',
+    photo: '/HZ_1.JPG',
+    initial: 'H',
+  },
+  {
+    name: 'Bianca Mahadevan',
+    role: 'Head of Social Media Management',
+    division: 'Social Media',
+    email: 'bianca@mawkishcreates.com',
+    phone: '+94 XX XXX XXXX',
+    desc: 'Building brand presence and community through strategy-led social content, engagement, and storytelling.',
+    photo: '/team-bianca.jpg',
+    initial: 'B',
+  },
+  {
+    name: 'Yuttzriel',
+    role: 'Head of Event Intelligence Solutions',
+    division: 'Events',
+    email: 'yuttzriel@mawkishcreates.com',
+    phone: '+94 XX XXX XXXX',
+    desc: 'Crafting immersive event experiences backed by data-driven intelligence and flawless production.',
+    photo: '/Yuttzriel.PNG',
+    initial: 'Y',
+  },
 ]
 
-/* ── Pinned Storytelling Block ──────────────────────────────
-   GSAP pins the founder story section while the 4 narrative
-   blocks appear one by one as the user scrolls through them.
-   Falls back gracefully to staggered reveal if GSAP is absent.
-─────────────────────────────────────────────────────────────── */
-function PinnedFounderStory({ narrativeRef }) {
-  const pinnedRef = useRef(null)
-
-  useEffect(() => {
-    const el = pinnedRef.current
-    if (!el) return
-
-    let ctx
-    import('gsap').then(({ gsap }) => {
-      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-        gsap.registerPlugin(ScrollTrigger)
-
-        const blocks = el.querySelectorAll('.founder-block')
-        if (!blocks.length) return
-
-        ctx = gsap.context(() => {
-          // Fade each block in as the user scrolls
-          blocks.forEach((block, i) => {
-            gsap.fromTo(block,
-              { opacity: 0, x: -40 },
-              {
-                opacity: 1,
-                x: 0,
-                duration: 0.85,
-                ease: 'power3.out',
-                scrollTrigger: {
-                  trigger: block,
-                  start: 'top 78%',
-                  toggleActions: 'play none none reverse',
-                },
-              }
-            )
-          })
-
-          // Subtle parallax on the quote card
-          const quoteCard = el.querySelector('.founder-quote-card')
-          if (quoteCard) {
-            gsap.fromTo(quoteCard,
-              { opacity: 0, y: 60, scale: 0.96 },
-              {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 1,
-                ease: 'expo.out',
-                scrollTrigger: {
-                  trigger: quoteCard,
-                  start: 'top 80%',
-                  toggleActions: 'play none none none',
-                },
-              }
-            )
-          }
-
-          // Tribute items stagger in
-          const tributeItems = el.querySelectorAll('.tribute-item')
-          if (tributeItems.length) {
-            gsap.fromTo(tributeItems,
-              { opacity: 0, y: 30 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.7,
-                ease: 'power2.out',
-                stagger: 0.15,
-                scrollTrigger: {
-                  trigger: tributeItems[0],
-                  start: 'top 82%',
-                  toggleActions: 'play none none none',
-                },
-              }
-            )
-          }
-
-          // Badge row
-          const badges = el.querySelectorAll('.founder-badge')
-          if (badges.length) {
-            gsap.fromTo(badges,
-              { opacity: 0, scale: 0.8, y: 20 },
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.6,
-                ease: 'back.out(1.7)',
-                stagger: 0.12,
-                scrollTrigger: {
-                  trigger: badges[0],
-                  start: 'top 85%',
-                  toggleActions: 'play none none none',
-                },
-              }
-            )
-          }
-        }, el)
-      })
-    }).catch(() => {
-      // Fallback: simple class-based reveal
-      const obs = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          el.querySelectorAll('.founder-block').forEach((b, i) => {
-            setTimeout(() => b.classList.add('revealed'), i * 150)
-          })
-          obs.disconnect()
-        }
-      }, { threshold: 0.1 })
-      obs.observe(el)
-    })
-
-    return () => ctx?.revert()
-  }, [])
-
-  return pinnedRef
-}
-
+/* ── Component ─────────────────────────────────────────────── */
 export default function About() {
-  const missionRef  = useGsapReveal({ stagger: 0.18, y: 50 })
-  const whyRef      = useGsapReveal({ stagger: 0.12, y: 45 })
-  const philosophyRef = useGsapReveal({ stagger: 0.14, y: 40 })
-  const heroRevealRef = useGsapReveal({ stagger: 0.15, y: 60, start: 'top 90%' })
-
-  // (no word-split on the hero h1 — it has styled <em> children we must preserve)
-
-  // Founder story GSAP (blocks + quote + tributes)
-  const founderRef = useRef(null)
-  const pinnedRefCallback = PinnedFounderStory({ narrativeRef: founderRef })
-
-  // Attach both refs to the same element
-  const founderSectionRef = useRef(null)
-  useEffect(() => {
-    if (founderSectionRef.current) {
-      founderRef.current = founderSectionRef.current
-      if (pinnedRefCallback) {
-        pinnedRefCallback.current = founderSectionRef.current
-      }
-    }
-  }, [])
+  const missionRef    = useScrollReveal()
+  const whyRef        = useScrollReveal()
+  const philosophyRef = useScrollReveal()
+  const ceoRef        = useScrollReveal()
+  const teamRef       = useScrollReveal()
 
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="about-hero page-hero" aria-label="About page hero" ref={heroRevealRef}>
+      <section className="about-hero page-hero" aria-label="About page hero">
         <div className="noise-overlay" aria-hidden="true" />
         <div className="container">
-          <p className="page-hero-label gsap-reveal">Our Story</p>
-          <h1 className="page-hero-title gsap-reveal">
-            From a Childhood Memory<br />
-            <em style={{ fontStyle: 'italic', color: 'var(--purple-300)' }}>to a Global Vision</em>
+          <div className="page-hero-label">Who We Are</div>
+          <h1 className="page-hero-title">
+            Built Different.<br />
+            <em style={{ fontStyle: 'italic', color: 'var(--purple-300)' }}>Driven by Purpose.</em>
           </h1>
-          <p className="page-hero-desc gsap-reveal">
-            Mawkish Creates is more than a business. It is a tribute, a legacy, and a promise.
+          <p className="page-hero-desc">
+            Mawkish Creates is not just an agency — it is a growth partner built from a lifetime of
+            creative ambition, real-world grit, and the belief that every brand deserves a story worth telling.
           </p>
         </div>
       </section>
 
-      {/* ── Founder Story ─────────────────────────────────────── */}
-      {/*
-        founderSectionRef → GSAP animates each .founder-block,
-        the quote card, tribute items, and badges separately with
-        individual ScrollTriggers for a layered storytelling feel.
-      */}
-      <section
-        className="founder-story section"
-        aria-labelledby="founder-heading"
-        ref={founderSectionRef}
-      >
+      {/* ── CEO / Founder Story ───────────────────────────────── */}
+      <section className="ceo-section section" aria-labelledby="ceo-heading" ref={ceoRef}>
         <div className="container">
-          <div className="founder-inner">
+          <div className="ceo-inner">
 
-            {/* Timeline narrative */}
-            <div className="founder-content">
-              <p className="section-label">The Name Behind the Brand</p>
-              <h2 id="founder-heading" className="section-title">
-                Where <span className="highlight">Mawkish</span> Began
+            {/* Left — story */}
+            <div className="ceo-content">
+              <p className="section-label  ">The Founder</p>
+              <h2 id="ceo-heading" className="section-title  ">
+                From Journalism to <span className="highlight">Creative Vision</span>
               </h2>
-              <div className="divider" />
+              <div className="divider  " />
 
-              <div className="founder-narrative" ref={founderRef}>
-                {/* Each block has its own ScrollTrigger in PinnedFounderStory */}
-                <div className="founder-block">
-                  <div className="founder-block-year"></div>
-                  <p>
-                    Our story begins at home 
-                    — where family was everything. While our
-                    father, <strong>M J M Malick</strong>, worked for SriLankan Airlines in Al Khobar,
-                    Saudi Arabia, he quietly collected reward points with every ticket he sold. Not for
-                    himself, but for us.
-                  </p>
-                </div>
+              <div className="ceo-body">
+                <p className=" ">
+                  The path to Mawkish Creates was never a straight line. It began in journalism — learning
+                  how to find the story in the noise. That led to communications, where the craft of shaping
+                  narratives for organisations took shape. Then came tech, where systems thinking and digital
+                  infrastructure opened a new world of possibility.
+                </p>
+                <p className=" ">
+                  But it was in the <strong>creative space</strong> that everything finally clicked. The
+                  intersection of storytelling, strategy, and technology — that was the footing. And from
+                  that vantage point, a pattern became impossible to ignore: agencies were everywhere, but
+                  true <strong>growth partners</strong> were nowhere to be found.
+                </p>
+                <p className=" ">
+                  Most agencies sold services. Few sold outcomes. Fewer still embedded themselves deep
+                  enough into a client's world to actually drive transformation. That gap — between a
+                  vendor and a partner — is exactly the space <strong>Mawkish Creates</strong> was built
+                  to occupy.
+                </p>
+                <p className=" ">
+                  Today, Mawkish Creates operates across four divisions — each led by a specialist — unified
+                  by a single obsession: <em>growth that compounds</em>.
+                </p>
+              </div>
 
-                <div className="founder-block">
-                  <div className="founder-block-year"></div>
-                  <p>
-                    When our brother <strong>Harith Malick</strong> excelled in the Grade 5 Scholarship
-                    Exam, our father redeemed those hard-earned points to bring home our very first{' '}
-                    <strong>PlayStation One</strong>. That moment sparked our earliest love for
-                    technology — and introduced the name that would stay with us through every game,
-                    every memory, every late-night session.
-                  </p>
-                </div>
-
-                <div className="founder-block founder-block-highlight">
-                  <div className="founder-block-year"></div>
-                  <p>
-                    <strong className="name-highlight">Mawkish</strong> — my brother's gaming name.
-                    As brothers, we grew up driven by healthy competition — on the football field, the
-                    cricket pitch, and in front of a screen. That drive shaped who I am and ultimately
-                    inspired the identity of the company founded.
-                  </p>
-                </div>
-
-                <div className="founder-block">
-                  <div className="founder-block-year"></div>
-                  <p>
-                    Mawkish was founded in 2020 and we began actively building it from
-                    October 2025. As we enter our next chapter, we move forward with renewed purpose —
-                    carrying every family memory, every sacrifice, and every lesson into everything we
-                    create for our clients.
-                  </p>
-                </div>
+              {/* Mawkish Tech callout */}
+              <div className="ceo-tech-callout  ">
+                <div className="ceo-tech-label">Also Part of the Ecosystem</div>
+               <a href="https://mawkishtechnologies.com/" target="_blank" rel="noopener noreferrer" className="ceo-tech-name ceo-tech-link">Mawkish Technologies</a>
+                
+                <p className="ceo-tech-desc">
+                  Our technology arm — building the digital infrastructure, automation systems, and
+                  proprietary tools that power the Mawkish Creates ecosystem and beyond.
+                </p>
               </div>
             </div>
 
-            {/* Right — Quote + Tribute */}
-            <div className="founder-visual">
-              <div className="founder-quote-card">
-                <div className="founder-quote-mark" aria-hidden="true">"</div>
-                <p className="founder-quote-text">
-                  Mawkish is more than a company. It is a tribute, a legacy, and a promise.
-                </p>
-                <div className="founder-quote-sub">
-                  From Sri Lanka to the world — our journey continues.
-                </div>
+            {/* Right — CEO photo */}
+            <div className="ceo-visual  ">
+              <div className="ceo-photo-frame">
+                <img
+                  src="/AB_1.png"
+                  alt="Founder & CEO, Mawkish Creates"
+                  className="ceo-photo"
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+                <div className="ceo-photo-placeholder" aria-hidden="true">MC</div>
               </div>
-
-              {/* Tribute block */}
-              <div className="founder-tribute">
-                <div className="founder-tribute-header">
-                  <IconHeart size={16} strokeWidth={1.75} color="var(--purple-400)" />
-                  <span>With Gratitude</span>
-                </div>
-                {tributes.map(({ name, role, note }) => (
-                  <div key={name} className="tribute-item">
-                    <div className="tribute-avatar" aria-hidden="true">
-                      {name.charAt(0)}
-                    </div>
-                    <div className="tribute-body">
-                      <div className="tribute-name">{name}</div>
-                      <div className="tribute-role">{role}</div>
-                      <div className="tribute-note">{note}</div>
-                    </div>
-                  </div>
-                ))}
+              <div className="ceo-name-card">
+                <div className="ceo-name">Founder &amp; CEO</div>
+                <div className="ceo-title">Mawkish Creates &amp; Mawkish Tech</div>
+                <div className="ceo-location">Sri Lanka → Global</div>
               </div>
-
-              {/* Founded badge */}
-              <div className="founder-badge-row">
-                <div className="founder-badge">
-                  <div className="founder-badge-num">2020</div>
-                  <div className="founder-badge-text">Founded</div>
+              <div className="ceo-stat-row">
+                <div className="ceo-stat">
+                  <div className="ceo-stat-num">2020</div>
+                  <div className="ceo-stat-text">Founded</div>
                 </div>
-                <div className="founder-badge">
-                  <div className="founder-badge-num">SL</div>
-                  <div className="founder-badge-text">Sri Lanka</div>
+                <div className="ceo-stat">
+                  <div className="ceo-stat-num">4</div>
+                  <div className="ceo-stat-text">Divisions</div>
                 </div>
-                <div className="founder-badge">
-                  <div className="founder-badge-num">∞</div>
-                  <div className="founder-badge-text">Global Vision</div>
+                <div className="ceo-stat">
+                  <div className="ceo-stat-num">∞</div>
+                  <div className="ceo-stat-text">Global Vision</div>
                 </div>
               </div>
             </div>
@@ -327,17 +181,61 @@ export default function About() {
         </div>
       </section>
 
+      {/* ── Division Heads ────────────────────────────────────── */}
+      <section className="team-section section" aria-labelledby="team-heading" ref={teamRef}>
+        <div className="container">
+          <p className="section-label  ">The Leadership</p>
+          <h2 id="team-heading" className="section-title  ">
+            Heads of <span className="highlight">Division</span>
+          </h2>
+          <p className="section-subtitle">
+            Four divisions. Four specialists. One unified growth mission.
+          </p>
+          <div className="team-grid">
+            {divisionHeads.map(({ name, role, division, email, phone, desc, photo, initial }) => (
+              <div key={name} className="team-card">
+                <div className="team-card-photo-wrap">
+                  <img
+                    src={photo}
+                    alt={name}
+                    className="team-card-photo"
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                  <div className="team-card-initial" aria-hidden="true">{initial}</div>
+                  <div className="team-card-division-badge">{division}</div>
+                </div>
+                <div className="team-card-body">
+                  <div className="team-card-name">{name}</div>
+                  <div className="team-card-role">{role}</div>
+                  <p className="team-card-desc">{desc}</p>
+                  <div className="team-card-contacts">
+                    <a href={`mailto:${email}`} className="team-contact-link">
+                      <IconMail size={14} strokeWidth={1.75} color="var(--purple-400)" />
+                      <span>{email}</span>
+                    </a>
+                    <a href={`tel:${phone.replace(/\s/g,'')}`} className="team-contact-link">
+                      <IconPhone size={14} strokeWidth={1.75} color="var(--purple-400)" />
+                      <span>{phone}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Mission & Vision ──────────────────────────────────── */}
       <section className="mission-section section" aria-labelledby="mission-heading" ref={missionRef}>
         <div className="container">
-          <p className="section-label gsap-reveal">Our Direction</p>
-          <h2 id="mission-heading" className="section-title gsap-reveal">
-            Mission & <span className="highlight">Vision</span>
+          <p className="section-label">Our Direction</p>
+          <h2 id="mission-heading" className="section-title  ">
+            Mission &amp; <span className="highlight">Vision</span>
           </h2>
           <div className="mission-grid">
             {missionCards.map(({ Icon, title, text }) => (
-              <div key={title} className="mission-card gsap-reveal">
-                <Icon size={36} strokeWidth={1.4} color="var(--purple-600)" className="mission-card-icon" />
+              <div key={title} className="mission-card  ">
+                <Icon size={36} strokeWidth={1.4} color="var(--purple-400)" className="mission-card-icon" />
                 <h3 className="mission-card-title">{title}</h3>
                 <p className="mission-card-text">{text}</p>
               </div>
@@ -351,14 +249,14 @@ export default function About() {
         <div className="container">
           <div className="philosophy-inner">
             <div>
-              <p className="section-label gsap-reveal">How We Think</p>
-              <h2 id="philosophy-heading" className="section-title gsap-reveal">
+              <p className="section-label  ">How We Think</p>
+              <h2 id="philosophy-heading" className="section-title  ">
                 Our Company <span className="highlight">Philosophy</span>
               </h2>
-              <div className="divider gsap-reveal" />
+              <div className="divider  " />
               <div className="philosophy-pillars">
                 {pillars.map(({ title, desc }, i) => (
-                  <div key={title} className="pillar-item gsap-reveal">
+                  <div key={title} className="pillar-item  ">
                     <div className="pillar-number">0{i + 1}</div>
                     <div className="pillar-content">
                       <div className="pillar-title">{title}</div>
@@ -368,7 +266,7 @@ export default function About() {
                 ))}
               </div>
             </div>
-            <div className="philosophy-visual gsap-reveal">
+            <div className="philosophy-visual  ">
               <div className="philosophy-quote-block">
                 <p className="philosophy-quote-text">
                   "Marketing is no longer about the stuff that you make, but about the stories you tell — and the results they create."
@@ -384,17 +282,17 @@ export default function About() {
       <section className="why-section section" aria-labelledby="why-heading" ref={whyRef}>
         <div className="container">
           <div className="why-header">
-            <p className="section-label gsap-reveal">Our Advantage</p>
-            <h2 id="why-heading" className="section-title gsap-reveal">
+            <p className="section-label  ">Our Advantage</p>
+            <h2 id="why-heading" className="section-title  ">
               Why Businesses Choose <span className="highlight">Mawkish Creates</span>
             </h2>
-            <p className="section-subtitle gsap-reveal">
+            <p className="section-subtitle  ">
               Beyond campaigns and content, we bring a strategic partnership that compounds over time.
             </p>
           </div>
           <div className="why-grid">
             {whyCards.map(({ Icon, title, desc }) => (
-              <div key={title} className="why-card gsap-reveal">
+              <div key={title} className="why-card  ">
                 <Icon size={32} strokeWidth={1.4} color="var(--purple-300)" className="why-card-icon" />
                 <h3 className="why-card-title">{title}</h3>
                 <p className="why-card-desc">{desc}</p>
