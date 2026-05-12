@@ -248,7 +248,6 @@ export default function SocialMediaMgmtWwU() {
                   {plan.featured && <div className="smm-chart-popular">Most Popular</div>}
                   <div className="smm-chart-tier">{plan.tier}</div>
                   <div className="smm-chart-name">{plan.name}</div>
-                  <p className="smm-chart-desc">{plan.desc}</p>
                 </div>
               ))}
             </div>
