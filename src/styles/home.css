@@ -995,6 +995,25 @@
 
 @media (max-width: 768px) {
 
+  .hero {
+    min-height: 100svh;
+    align-items: flex-start;
+    padding-top: 90px;
+    padding-bottom: 80px;
+  }
+
+  .hero-inner {
+    padding-top: 0;
+  }
+
+  .hero-content {
+    margin-top: 0;
+  }
+
+  .hero-title {
+    margin-top: 0;
+  }
+
   .hero-bg-orb-1,
   .hero-bg-orb-2,
   .hero-bg-orb-3 {
