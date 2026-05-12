@@ -7,79 +7,55 @@ import {
 } from '../components/Icons'
 import '../styles/workwithus.css'
 
-/* ── Services data — synced to subpages ───────────────────── */
+/* ── Data ─────────────────────────────────────────────────── */
 const services = [
   {
     index: '01',
     Icon: IconTarget,
     label: 'Lead Generation',
     tagline: 'Fill your pipeline.',
-    desc: 'Precision-engineered systems that attract and deliver high-quality leads directly into your pipeline — consistently, month after month.',
-    highlights: [
-      'Up to 150+ leads/month (Accelerate plan)',
-      'Multi-platform ad campaigns',
-      'Full lead qualification & CRM integration',
-      'Nurture sequences & A/B testing',
-    ],
+    desc: 'Precision-engineered campaigns that deliver high-quality, conversion-ready leads directly into your pipeline — consistently, every month.',
+    highlights: ['Targeted social ad campaigns', 'Lead qualification & scoring', 'CRM integration & nurture', 'Up to 150+ leads/month'],
     metric: '150+',
     metricLabel: 'Leads / Month',
     accentColor: '#7b2ff7',
     to: '/work-with-us/lead-generation',
-    plans: ['Launch', 'Accelerate', 'Dominate'],
   },
   {
     index: '02',
     Icon: IconSmartphone,
     label: 'Social Media',
     tagline: 'Own the feed.',
-    desc: 'Two ways to work with us — fully managed social media or expert coaching to build your own in-house capability.',
-    highlights: [
-      'Off the Shelf: strategy, editing, posting & growth', 
-      'Tailor Made: on-site filming & high-production content',
-      'Growth Accelerator: frameworks, systems & live sessions',
-    ]    ,
+    desc: 'End-to-end social media management or expert coaching — choose the approach that fits how you want to work.',
+    highlights: ['Done For You: full management', 'Coaching: build your own team', 'Content, strategy & community', '2–5 platforms handled'],
     metric: '5×',
     metricLabel: 'Avg Engagement Lift',
-    accentColor: '#e879b0',
+    accentColor: '#c9a84c',
     to: '/work-with-us/social-media-management',
-    plans: ['Off the Shelf', 'Tailor Made', 'Growth Accelerator'],
   },
   {
     index: '03',
     Icon: IconCalendar,
-    label: 'Event Solutions and Management',
+    label: 'Event Management',
     tagline: 'Build the moment.',
-    desc: 'Strategic event management that amplifies your brand and creates an experience that lives on long after the event ends.',
-    highlights: [
-      'Pre & post-event campaign management',
-      'Live social media coverage & graphics',
-      'Influencer outreach & ticketing promotion',
-      'From single events to annual partnerships',
-    ],
+    desc: 'Strategic event marketing that builds buzz before, amplifies your brand during, and creates lasting content after every event.',
+    highlights: ['Pre & post-event campaigns', 'Live social media coverage', 'Event graphics & content', 'Ticketing & attendance growth'],
     metric: '3×',
     metricLabel: 'Attendance Growth',
-    accentColor: '#c9a84c',
+    accentColor: '#e879b0',
     to: '/work-with-us/events',
-    plans: ['Single Event', 'Event Series', 'Annual Partner'],
   },
   {
     index: '04',
     Icon: IconGlobe,
-    label: 'Digital Solutions',
+    label: 'Web Development',
     tagline: 'Make it unforgettable.',
-    desc: 'We design and develop high-performance digital solutions that don\'t just look good; engineered to convert, perform, and grow with your business.',
-    // Reflects: Starter Websites / Business Websites / E-Commerce Solutions
-    highlights: [
-      'Starter to fully custom builds',
-      'Advanced SEO & CMS integration',
-      'E-commerce & payment gateway setup',
-      'Performance optimised & secure',
-    ],
+    desc: 'High-performance websites and landing pages crafted to convert — every pixel purposeful, every interaction intentional.',
+    highlights: ['Custom design & development', 'Conversion-optimised UX', 'CMS & e-commerce ready', 'SEO-first architecture'],
     metric: '98',
     metricLabel: 'Avg Lighthouse Score',
     accentColor: '#5eead4',
     to: '/work-with-us/web-development',
-    plans: ['Starter', 'Business', 'E-Commerce'],
   },
 ]
 
@@ -98,7 +74,7 @@ function CountUp({ value }) {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const num    = parseFloat(value.replace(/[^0-9.]/g, ''))
+    const num = parseFloat(value.replace(/[^0-9.]/g, ''))
     const suffix = value.replace(/[0-9.]/g, '')
     const obs = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return
@@ -106,9 +82,9 @@ function CountUp({ value }) {
       const start = performance.now()
       const dur   = 1600
       const tick  = (now) => {
-        const p      = Math.min((now - start) / dur, 1)
+        const p = Math.min((now - start) / dur, 1)
         const easedP = 1 - Math.pow(1 - p, 3)
-        const cur    = num % 1 === 0
+        const cur = num % 1 === 0
           ? Math.floor(easedP * num)
           : (easedP * num).toFixed(1)
         setDisplay(`${cur}${suffix}`)
@@ -123,33 +99,45 @@ function CountUp({ value }) {
   return <span ref={ref}>{display}</span>
 }
 
-/* ── Service Row ──────────────────────────────────────────── */
-function ServiceRow({ s }) {
+/* ── Service Row (horizontal editorial layout) ────────────── */
+function ServiceRow({ s, i }) {
+  const rowRef = useRef(null)
+  const [hovered, setHovered] = useState(false)
+
   return (
     <div
-      className="wwu-row gsap-reveal"
+      ref={rowRef}
+      className={`wwu-row gsap-reveal`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{ '--row-accent': s.accentColor }}
     >
-      {/* Index */}
+      {/* Left: index + icon */}
       <div className="wwu-row-index">
         <span className="wwu-row-num">{s.index}</span>
+
       </div>
 
-      {/* Label + tagline + desc */}
+      {/* Centre-left: label + tagline + desc */}
       <div className="wwu-row-main">
-        <div className="wwu-row-label">{s.label}</div>
-        <h2 className="wwu-row-tagline">{s.tagline}</h2>
-        <p className="wwu-row-desc">{s.desc}</p>
+        <div className="wwu-row-heading-wrap">
+    <div className="wwu-row-heading-text">
+      <div className="wwu-row-label">{s.label}</div>
+      <h2 className="wwu-row-tagline">{s.tagline}</h2>
+    </div>
 
-        {/* Plan tier pills */}
-        <div className="wwu-row-plans">
-          {s.plans.map(p => (
-            <span key={p} className="wwu-row-plan-pill">{p}</span>
-          ))}
-        </div>
+    <div className="wwu-row-metric wwu-row-metric--mobile">
+      <div className="wwu-row-metric-num">
+        <CountUp value={s.metric} />
+      </div>
+      <div className="wwu-row-metric-label">{s.metricLabel}</div>
+    </div>
+  </div>
+
+  <p className="wwu-row-desc">{s.desc}</p>
       </div>
 
-      {/* Feature list */}
+      {/* Centre-right: feature list */}
       <div className="wwu-row-features">
         {s.highlights.map(h => (
           <div key={h} className="wwu-row-feature">
@@ -159,7 +147,7 @@ function ServiceRow({ s }) {
         ))}
       </div>
 
-      {/* Metric + CTA */}
+      {/* Right: metric + CTA */}
       <div className="wwu-row-right">
         <div className="wwu-row-metric">
           <div className="wwu-row-metric-num">
@@ -167,7 +155,7 @@ function ServiceRow({ s }) {
           </div>
           <div className="wwu-row-metric-label">{s.metricLabel}</div>
         </div>
-        <Link to={s.to} className="wwu-row-cta" style={{ position: 'relative', zIndex: 2 }}>
+        <Link to={s.to} className="wwu-row-cta">
           <span>Explore</span>
           <IconArrowRight size={16} strokeWidth={2} />
         </Link>
@@ -181,9 +169,9 @@ function ServiceRow({ s }) {
 
 /* ── Page ─────────────────────────────────────────────────── */
 export default function WorkWithUs() {
-  const statsRef = useGsapReveal({ stagger: 0.1,  y: 40, start: 'top 85%' })
-  const rowsRef  = useGsapReveal({ stagger: 0.12, y: 60, start: 'top 82%' })
-  const ctaRef   = useGsapReveal({ stagger: 0.14, y: 40, start: 'top 88%' })
+  const statsRef   = useGsapReveal({ stagger: 0.1, y: 40, start: 'top 85%' })
+  const rowsRef    = useGsapReveal({ stagger: 0.12, y: 60, start: 'top 82%' })
+  const ctaRef     = useGsapReveal({ stagger: 0.14, y: 40, start: 'top 88%' })
 
   return (
     <>
@@ -194,24 +182,45 @@ export default function WorkWithUs() {
 
         <div className="container wwu-hero-container">
 
+          {/* Top rule row */}
+          <div className="wwu-hero-topbar">
+            <span className="wwu-hero-eyebrow">— Let's Collaborate</span>
+            <span className="wwu-hero-eyebrow-right">Mawkish Creates · 2025</span>
+          </div>
+
+          {/* Main title block */}
           <div className="wwu-hero-title-block">
             <h1 className="wwu-hero-title">
-              <span className="wwu-hero-title-line wwu-hero-title-line">WORK</span>
-              <span className="wwu-hero-title-line wwu-hero-title-line">WITH</span>
+              <span className="wwu-hero-title-line wwu-hero-title-line--outlined">WORK</span>
+              <span className="wwu-hero-title-line wwu-hero-title-line--filled">WITH</span>
               <span className="wwu-hero-title-line wwu-hero-title-line--italic">Us.</span>
             </h1>
           </div>
 
+          {/* Bottom info row */}
           <div className="wwu-hero-bottombar">
             <p className="wwu-hero-sub">
               Select the service that aligns with your goals.<br />
+              Each path has its own plans, pricing, and inquiry form.
             </p>
+
+            {/* Floating service pills */}
+            <div className="wwu-hero-pills" aria-hidden="true">
+              <span className="wwu-hero-pill">Lead Generation</span>
+              <span className="wwu-hero-pill wwu-hero-pill--accent">Social Media</span>
+              <span className="wwu-hero-pill">Event Management</span>
+              <span className="wwu-hero-pill wwu-hero-pill--outline">Web Development</span>
+            </div>
+
+            {/* Scroll hint */}
             <div className="wwu-hero-scroll">
               <div className="wwu-hero-scroll-track">
                 <div className="wwu-hero-scroll-thumb" />
               </div>
+              <span>Scroll</span>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -233,17 +242,22 @@ export default function WorkWithUs() {
       {/* ── Services — editorial rows ─────────────────────────── */}
       <section className="wwu-services" aria-label="Services" ref={rowsRef}>
         <div className="container">
+
+          {/* Section header */}
           <div className="wwu-services-header">
             <div className="section-label">Our Services</div>
             <h2 className="wwu-services-heading">
               Four ways to <span className="highlight">grow.</span>
             </h2>
           </div>
+
+          {/* Rows */}
           <div className="wwu-rows">
-            {services.map((s) => (
-              <ServiceRow key={s.index} s={s} />
+            {services.map((s, i) => (
+              <ServiceRow key={s.index} s={s} i={i} />
             ))}
           </div>
+
         </div>
       </section>
 
@@ -275,5 +289,5 @@ export default function WorkWithUs() {
         </div>
       </section>
     </>
-  )
+  )  
 }
