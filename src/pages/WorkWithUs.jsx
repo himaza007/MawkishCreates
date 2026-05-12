@@ -36,10 +36,9 @@ const services = [
     // Two paths: Done For You + Coaching
     desc: 'Two ways to work with us — fully managed social media or expert coaching to build your own in-house capability.',
     highlights: [
-      'Done For You: strategy, content, posting & reporting',
-      'Coaching: 1-on-1 sessions, frameworks & live support',
-      'Up to 5 platforms handled',
-      'Community management & paid ads (optional)',
+      'Off the shelf',
+      'Tailor made',
+      'Growth Accelerator',
     ],
     metric: '5×',
     metricLabel: 'Avg Engagement Lift',
