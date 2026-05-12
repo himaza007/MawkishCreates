@@ -951,51 +951,77 @@
 
   .smm-chart-head,
   .smm-chart-row {
-    grid-template-columns: 150px repeat(3, 86px);
-    min-width: 408px;
+    display: grid;
+    grid-template-columns: 150px repeat(3, 96px);
+    min-width: 438px;
+  }
+
+  .smm-chart-head {
+    align-items: stretch;
   }
 
   .smm-chart-head-spacer {
-    padding: var(--space-4) var(--space-3);
+    min-height: 96px;
+    padding: 0;
   }
 
   .smm-chart-col-head {
-    padding: var(--space-5) var(--space-2);
+    position: relative;
+    min-height: 96px;
+    padding: 28px 8px 16px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-end;
     text-align: center;
-    justify-content: center;
   }
 
   .smm-chart-tier {
-    margin-top: 0;
-    font-size: 8px;
-    letter-spacing: 0.14em;
+    margin: 0;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
   }
 
   .smm-chart-name {
+    margin-top: 6px;
     font-size: 0.82rem;
     line-height: 1.2;
     text-align: center;
   }
 
   .smm-chart-popular {
-    font-size: 7px;
-    padding: 3px 8px;
-    max-width: 76px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92px;
+    padding: 6px 8px;
+    border-radius: 0 0 14px 14px;
+    font-size: 8px;
+    line-height: 1.15;
+    letter-spacing: 0.14em;
     text-align: center;
     white-space: normal;
-    line-height: 1.1;
+  }
+
+  .smm-chart-row {
+    min-height: 64px;
+    align-items: stretch;
   }
 
   .smm-chart-feature-label {
+    min-height: 64px;
     padding: 12px 10px;
+    display: flex;
+    align-items: center;
     font-size: 0.78rem;
     line-height: 1.35;
   }
 
   .smm-chart-cell {
-    min-height: 48px;
-    padding: 10px 6px;
+    min-height: 64px;
+    padding: 0 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1005,15 +1031,120 @@
     width: 22px;
     height: 22px;
     font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .smm-dash {
-    width: 16px;
+    width: 18px;
+    height: 3px;
+    display: block;
   }
 
   .smm-chart-group-label {
     padding: 10px 12px;
     font-size: 8px;
     letter-spacing: 0.14em;
+  }
+
+  .smm-pricing-chart {
+    overflow-x: auto;
+    border-radius: var(--radius-xl);
+  }
+
+  .smm-chart-head,
+  .smm-chart-row {
+    display: grid;
+    grid-template-columns: 140px repeat(3, 118px);
+    min-width: 494px;
+  }
+
+  .smm-chart-head {
+    align-items: stretch;
+  }
+
+  .smm-chart-head-spacer {
+    min-height: 126px;
+  }
+
+  .smm-chart-col-head {
+    position: relative;
+    min-height: 126px;
+    padding: 44px 10px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+  }
+
+  .smm-chart-tier {
+    min-height: 14px;
+    margin: 0 0 12px;
+    font-size: 9px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .smm-chart-name {
+    min-height: 38px;
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .smm-chart-popular {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 116px;
+    padding: 6px 8px;
+    border-radius: 0 0 14px 14px;
+    font-size: 8px;
+    line-height: 1.15;
+    letter-spacing: 0.14em;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .smm-chart-group-label {
+    display: block;
+    width: 494px;
+    min-width: 494px;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .smm-chart-row {
+    min-height: 64px;
+    align-items: stretch;
+  }
+
+  .smm-chart-feature-label {
+    min-height: 64px;
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .smm-chart-cell {
+    min-height: 64px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
