@@ -927,3 +927,93 @@
   from { transform: scale(0.5); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
+
+/* ── Mobile fix for Social Media comparison chart ───────────── */
+
+@media (max-width: 640px) {
+  .smm-compare-section {
+    padding: var(--space-16) 0 var(--space-20);
+  }
+
+  .smm-compare-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .smm-compare-title {
+    font-size: 1.7rem;
+    line-height: 1.2;
+  }
+
+  .smm-pricing-chart {
+    overflow-x: auto;
+    border-radius: var(--radius-xl);
+  }
+
+  .smm-chart-head,
+  .smm-chart-row {
+    grid-template-columns: 150px repeat(3, 86px);
+    min-width: 408px;
+  }
+
+  .smm-chart-head-spacer {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .smm-chart-col-head {
+    padding: var(--space-5) var(--space-2);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .smm-chart-tier {
+    margin-top: 0;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .smm-chart-name {
+    font-size: 0.82rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .smm-chart-popular {
+    font-size: 7px;
+    padding: 3px 8px;
+    max-width: 76px;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.1;
+  }
+
+  .smm-chart-feature-label {
+    padding: 12px 10px;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .smm-chart-cell {
+    min-height: 48px;
+    padding: 10px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .smm-check {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .smm-dash {
+    width: 16px;
+  }
+
+  .smm-chart-group-label {
+    padding: 10px 12px;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+}
