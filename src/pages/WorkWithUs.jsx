@@ -196,8 +196,8 @@ export default function WorkWithUs() {
 
           <div className="wwu-hero-title-block">
             <h1 className="wwu-hero-title">
-              <span className="wwu-hero-title-line wwu-hero-title-line--outlined">WORK</span>
-              <span className="wwu-hero-title-line wwu-hero-title-line--filled">WITH</span>
+              <span className="wwu-hero-title-line wwu-hero-title-line">WORK</span>
+              <span className="wwu-hero-title-line wwu-hero-title-line">WITH</span>
               <span className="wwu-hero-title-line wwu-hero-title-line--italic">Us.</span>
             </h1>
           </div>
