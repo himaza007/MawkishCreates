@@ -47,10 +47,9 @@ const services = [
   {
     index: '03',
     Icon: IconCalendar,
-    label: 'Intelligent Events',
+    label: 'Event Solutions and Management',
     tagline: 'Build the moment.',
-    desc: 'Strategic event marketing that drives attendance, amplifies your brand, and creates content that lives on long after the event ends.',
-    // Reflects: Single Event / Event Series / Annual Partner
+    desc: 'Strategic event management that amplifies your brand and creates an experience that lives on long after the event ends.',
     highlights: [
       'Pre & post-event campaign management',
       'Live social media coverage & graphics',
@@ -206,19 +205,11 @@ export default function WorkWithUs() {
           <div className="wwu-hero-bottombar">
             <p className="wwu-hero-sub">
               Select the service that aligns with your goals.<br />
-              Each path has its own plans, pricing, and inquiry form.
             </p>
-            <div className="wwu-hero-pills" aria-hidden="true">
-              <span className="wwu-hero-pill">Lead Generation</span>
-              <span className="wwu-hero-pill wwu-hero-pill--accent">Social Media</span>
-              <span className="wwu-hero-pill">Intelligent Events</span>
-              <span className="wwu-hero-pill wwu-hero-pill--outline">Web Development</span>
-            </div>
             <div className="wwu-hero-scroll">
               <div className="wwu-hero-scroll-track">
                 <div className="wwu-hero-scroll-thumb" />
               </div>
-              <span>Scroll</span>
             </div>
           </div>
         </div>
