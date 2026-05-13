@@ -846,3 +846,37 @@
     animation: none !important;
   }
 }
+
+/* ── Mobile Lead Generation Hero Image Fix ───────────────── */
+
+@media (max-width: 768px) {
+  .leadgen-hero-grid {
+    gap: var(--space-6);
+  }
+
+  .leadgen-hero-funnel {
+    width: 100%;
+    max-width: 540px;
+    margin: var(--space-4) auto 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .leadgen-funnel-img {
+    width: min(100%, 430px);
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 420px) {
+  .leadgen-hero-funnel {
+    max-width: 380px;
+  }
+
+  .leadgen-funnel-img {
+    width: min(100%, 480px);
+    height: auto;
+  }
+}
