@@ -693,3 +693,42 @@
 .page-hero .noise-overlay {
   opacity: 0.04;
 }
+@media (max-width: 640px) {
+  .ceo-visual {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ceo-photo-frame {
+    margin: 0 auto;
+  }
+
+  .ceo-name-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ceo-name,
+  .ceo-title,
+  .ceo-location {
+    text-align: center;
+  }
+
+  .ceo-stat-row {
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+  }
+
+  .ceo-stat {
+    text-align: center;
+  }
+
+  .ceo-stat-num,
+  .ceo-stat-text {
+    text-align: center;
+  }
+}
