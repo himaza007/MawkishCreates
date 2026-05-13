@@ -241,7 +241,7 @@
 
 .team-section .section-subtitle {
   color: rgba(255,255,255,0.5);
-  margin: var(--space-3) 0 var(--space-14);
+  margin: var(--space-3) 0 12px;
   font-size: var(--text-base);
 }
 
