@@ -144,7 +144,7 @@ export default function Navbar() {
           >
             <div className="nav-logo-glow" aria-hidden="true" />
             <img
-              src="/mawkish-logo.png"
+              src="/mawkish-logo.webp"
               alt="Mawkish Creates"
               className={`nav-logo-img${scrolled ? ' scrolled' : ''}`}
             />

@@ -619,7 +619,7 @@ export default function LeadGenerationWwU() {
 
               <div className="leadgen-hero-funnel">
                 <img
-                  src="/leadGenPic.png"
+                  src="/leadGenPic.webp"
                   alt="Lead generation funnel visualization"
                   className="leadgen-funnel-img"
                 />

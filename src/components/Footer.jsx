@@ -41,7 +41,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Link to="/" className="footer-logo" aria-label="Mawkish Creates">
               <img
-                src="/mawkish-logo.png"
+                src="/mawkish-logo.webp"
                 alt="Mawkish Creates"
                 className="footer-logo-img"
               />

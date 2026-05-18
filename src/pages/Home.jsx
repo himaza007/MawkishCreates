@@ -472,16 +472,7 @@ function GalaxyJourney() {
     let ambientAudio = null
     let sparkleAudio = null
 
-    try {
-      ambientAudio = new Audio('./space-ambient.mp3')
-      ambientAudio.loop = true
-      ambientAudio.volume = 0.09
-      sparkleAudio = new Audio('/sounds/sparkle.mp3')
-      sparkleAudio.volume = 0.18
-    } catch {
-      ambientAudio = null
-      sparkleAudio = null
-    }
+  
 
     const startAmbient = () => {
       ambientAudio?.play().catch(() => {})
@@ -674,11 +665,11 @@ function PhotoStrip() {
   const containerRef = useRef(null)
 
   const photos = [
-    { src: '4_mwc.jpeg', rotate: '-8deg', top: '5%', left: '5%' },
-    { src: '2_mwc.jpeg', rotate: '6deg', top: '0%', left: '30%' },
-    { src: '1_mwc.jpeg', rotate: '-4deg', top: '35%', left: '15%' },
-    { src: '3_mwc.jpeg', rotate: '10deg', top: '20%', left: '55%' },
-    { src: '5_mwc.jpeg', rotate: '-6deg', top: '50%', left: '40%' },
+    { src: '4_mwc.webp', rotate: '-8deg', top: '5%', left: '5%' },
+    { src: '2_mwc.webp', rotate: '6deg', top: '0%', left: '30%' },
+    { src: '1_mwc.webp', rotate: '-4deg', top: '35%', left: '15%' },
+    { src: '3_mwc.webp', rotate: '10deg', top: '20%', left: '55%' },
+    { src: '5_mwc.webp', rotate: '-6deg', top: '50%', left: '40%' },
   ]
 
   useEffect(() => {

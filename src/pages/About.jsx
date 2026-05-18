@@ -44,7 +44,7 @@ const divisionHeads = [
     email: 'himaza@mawkishcreates.com',
     phone: '+94 XX XXX XXXX',
     desc: 'Driving precision lead pipelines and end-to-end digital solutions for brands that demand measurable growth.',
-    photo: '/HZ_1.JPG',
+    photo: '/HZ_1.webp',
     initial: 'H',
   },
   {
@@ -64,7 +64,7 @@ const divisionHeads = [
     email: 'yuttzriel@mawkishcreates.com',
     phone: '+94 XX XXX XXXX',
     desc: 'Crafting immersive event experiences backed by data-driven intelligence and flawless production.',
-    photo: '/Yuttzriel.PNG',
+    photo: '/Yuttzriel.webp',
     initial: 'Y',
   },
 ]
@@ -149,7 +149,7 @@ export default function About() {
             <div className="ceo-visual  ">
               <div className="ceo-photo-frame">
                 <img
-                  src="/AB_1.png"
+                  src="/AB_1.webp"
                   alt="Founder & CEO, Mawkish Creates"
                   className="ceo-photo"
                   onError={(e) => { e.target.style.display = 'none' }}
