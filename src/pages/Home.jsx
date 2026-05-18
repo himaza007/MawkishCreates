@@ -472,7 +472,7 @@ function GalaxyJourney() {
     let ambientAudio = null
     let sparkleAudio = null
 
-  
+
 
     const startAmbient = () => {
       ambientAudio?.play().catch(() => {})
