@@ -3,22 +3,17 @@
    ============================================================ */
 
 /* ── Hero ────────────────────────────────────────────────── */
-.wwu-hero {
-  position: relative;
+.wwu-hero.page-hero {
+  background: url('/WorkwithUs-hero-Dv-StQno.webp') center center / cover no-repeat #0d0120;
+}
+
+.wwu-hero.page-hero::before {
   background: linear-gradient(
     160deg,
     rgba(5, 0, 15, 0.645) 0%,
     rgba(18, 4, 50, 0.622) 50%,
     rgba(8, 1, 25, 0.581) 100%
   ) !important;
-  background-image: url('/WorkwithUs-hero.webp');  /* ← add this */
-  background-size: cover;                         /* ← add this */
-  background-position: center center;             /* ← add this */
-  background-repeat: no-repeat;                   /* ← add this */
-  min-height: 100vh;
-  display: flex;
-  align-items: stretch;
-  overflow: hidden;
 }
 
 /* Subtle purple glow at centre-right */
