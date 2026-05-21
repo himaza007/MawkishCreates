@@ -182,12 +182,6 @@ export default function WorkWithUs() {
 
         <div className="container wwu-hero-container">
 
-          {/* Top rule row */}
-          <div className="wwu-hero-topbar">
-            <span className="wwu-hero-eyebrow">— Let's Collaborate</span>
-            <span className="wwu-hero-eyebrow-right">Mawkish Creates · 2025</span>
-          </div>
-
           {/* Main title block */}
           <div className="wwu-hero-title-block">
             <h1 className="wwu-hero-title">
@@ -201,7 +195,6 @@ export default function WorkWithUs() {
           <div className="wwu-hero-bottombar">
             <p className="wwu-hero-sub">
               Select the service that aligns with your goals.<br />
-              Each path has its own plans, pricing, and inquiry form.
             </p>
 
             {/* Floating service pills */}
