@@ -27,7 +27,7 @@ const services = [
     label: 'Social Media',
     tagline: 'Own the feed.',
     desc: 'End-to-end social media management or expert coaching — choose the approach that fits how you want to work.',
-    highlights: ['Done For You: full management', 'Coaching: build your own team', 'Content, strategy & community', '2–5 platforms handled'],
+    highlights: ['Off the shelf', 'Tailor made', 'Growth Accelerator'],
     metric: '5×',
     metricLabel: 'Avg Engagement Lift',
     accentColor: '#c9a84c',
