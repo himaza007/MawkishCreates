@@ -54,7 +54,7 @@ const divisionHeads = [
     email: 'bianca@mawkishcreates.com',
     phone: '+94 XX XXX XXXX',
     desc: 'Building brand presence and community through strategy-led social content, engagement, and storytelling.',
-    photo: '/',
+    photo: '/team-bianca.jpg',
     initial: 'B',
   },
   {
@@ -64,7 +64,7 @@ const divisionHeads = [
     email: 'yuttzriel@mawkishcreates.com',
     phone: '+94 XX XXX XXXX',
     desc: 'Crafting immersive event experiences backed by data-driven intelligence and flawless production.',
-    photo: '/',
+    photo: '/team-bianca.jpg',
     initial: 'Y',
   },
 ]
