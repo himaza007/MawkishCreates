@@ -21,6 +21,7 @@ const services = [
     accentColor: '#7b2ff7',
     to: '/work-with-us/lead-generation',
   },
+  
   {
     index: '02',
     Icon: IconSmartphone,
