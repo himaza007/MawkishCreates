@@ -179,7 +179,7 @@ export default function WorkWithUs() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="wwu-hero" aria-label="Work With Us hero">
+      <section className="wwu-hero page-hero" aria-label="Work With Us hero">
         <div className="noise-overlay" aria-hidden="true" />
         <div className="wwu-hero-glow" aria-hidden="true" />
 
@@ -196,18 +196,6 @@ export default function WorkWithUs() {
 
           {/* Bottom info row */}
           <div className="wwu-hero-bottombar">
-            <p className="wwu-hero-sub">
-              Select the service that aligns with your goals.<br />
-            </p>
-
-            {/* Floating service pills */}
-            <div className="wwu-hero-pills" aria-hidden="true">
-              {/* LEADGEN — commented out */}
-              {/* <span className="wwu-hero-pill">Lead Generation</span> */}
-              <span className="wwu-hero-pill wwu-hero-pill--accent">Social Media</span>
-              <span className="wwu-hero-pill">Event Management</span>
-              <span className="wwu-hero-pill wwu-hero-pill--outline">Web Development</span>
-            </div>
 
             {/* Scroll hint */}
             <div className="wwu-hero-scroll">
