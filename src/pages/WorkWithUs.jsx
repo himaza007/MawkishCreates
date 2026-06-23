@@ -25,7 +25,7 @@ const services = [
   ── END LEADGEN ─────────────────────────────────────────────── */
 
   {
-    index: '02',
+    index: '01',
     Icon: IconSmartphone,
     label: 'Social Media',
     tagline: 'Own the feed.',
@@ -37,7 +37,7 @@ const services = [
     to: '/work-with-us/social-media-management',
   },
   {
-    index: '03',
+    index: '02',
     Icon: IconCalendar,
     label: 'Event Management',
     tagline: 'Build the moment.',
@@ -49,7 +49,7 @@ const services = [
     to: '/work-with-us/events',
   },
   {
-    index: '04',
+    index: '03',
     Icon: IconGlobe,
     label: 'Web Development',
     tagline: 'Make it unforgettable.',
