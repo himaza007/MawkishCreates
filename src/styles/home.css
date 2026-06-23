@@ -582,7 +582,9 @@
 
 @media (min-width: 1024px) {
   .services-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+    margin-inline: auto;
   }
 }
 
@@ -752,10 +754,12 @@
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-8);
   position: relative;
   z-index: 2;
+  max-width: 860px;
+  margin-inline: auto;
 }
 
 .metric-item {
@@ -981,7 +985,7 @@
   }
 
   .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .testimonials-grid {

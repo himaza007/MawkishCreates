@@ -37,12 +37,13 @@ const whyCards = [
 ]
 
 const divisionHeads = [
+  
   {
     name: 'Himaza Zahara',
-    role: 'Head of Lead Generation & Digital Solutions',
+    role: 'Head of Digital Solutions',
     division: 'Lead Gen & Digital Solutions',
     email: 'himaza@mawkishcreates.com',
-    phone: '+94 XX XXX XXXX',
+    phone: '+94 77 734 0082',
     desc: 'Driving precision lead pipelines and end-to-end digital solutions for brands that demand measurable growth.',
     photo: '/HZ_1.webp',
     initial: 'H',
@@ -52,20 +53,20 @@ const divisionHeads = [
     role: 'Head of Social Media Management',
     division: 'Social Media',
     email: 'bianca@mawkishcreates.com',
-    phone: '+94 XX XXX XXXX',
+    phone: '+94 77 734 7715',
     desc: 'Building brand presence and community through strategy-led social content, engagement, and storytelling.',
-    photo: '/team-bianca.jpg',
+    photo: '/Bianca.webp',
     initial: 'B',
   },
   {
-    name: 'Yuttzriel',
+    name: 'Faraz',
     role: 'Head of Event Intelligence Solutions',
     division: 'Events',
-    email: 'yuttzriel@mawkishcreates.com',
-    phone: '+94 XX XXX XXXX',
+    email: 'faraz@mawkishcreates.com',
+    phone: '+94 77 734 7795',
     desc: 'Crafting immersive event experiences backed by data-driven intelligence and flawless production.',
-    photo: '/team-bianca.jpg',
-    initial: 'Y',
+    photo: '/Faraz.webp',
+    initial: 'F',
   },
 ]
 
@@ -128,13 +129,13 @@ export default function About() {
                   to occupy.
                 </p>
                 <p className=" ">
-                  Today, Mawkish Creates operates across four divisions — each led by a specialist — unified
+                  Today, Mawkish Creates operates across three divisions — each led by a specialist — unified
                   by a single obsession: <em>growth that compounds</em>.
                 </p>
               </div>
 
               {/* Mawkish Tech callout */}
-              <div className="ceo-tech-callout  ">
+             {/* <div className="ceo-tech-callout  ">
                 <div className="ceo-tech-label">Also Part of the Ecosystem</div>
                <a href="https://mawkishtechnologies.com/" target="_blank" rel="noopener noreferrer" className="ceo-tech-name ceo-tech-link">Mawkish Technologies</a>
                 
@@ -142,7 +143,7 @@ export default function About() {
                   Our technology arm — building the digital infrastructure, automation systems, and
                   proprietary tools that power the Mawkish Creates ecosystem and beyond.
                 </p>
-              </div>
+              </div> */}
             </div>
 
             {/* Right — CEO photo */}
@@ -158,7 +159,7 @@ export default function About() {
               </div>
               <div className="ceo-name-card">
                 <div className="ceo-name">Founder &amp; CEO</div>
-                <div className="ceo-title">Mawkish Creates &amp; Mawkish Tech</div>
+                <div className="ceo-title">Mawkish Creates</div>
                 <div className="ceo-location">Sri Lanka → Global</div>
               </div>
               <div className="ceo-stat-row">
@@ -167,7 +168,7 @@ export default function About() {
                   <div className="ceo-stat-text">Founded</div>
                 </div>
                 <div className="ceo-stat">
-                  <div className="ceo-stat-num">4</div>
+                  <div className="ceo-stat-num">3</div>
                   <div className="ceo-stat-text">Divisions</div>
                 </div>
                 <div className="ceo-stat">
@@ -189,7 +190,7 @@ export default function About() {
             Heads of <span className="highlight">Division</span>
           </h2>
           <p className="section-subtitle">
-            Four divisions. Four specialists. One unified growth mission.
+            Three divisions. Three specialists. One unified growth mission.
           </p>
           <div className="team-grid">
             {divisionHeads.map(({ name, role, division, email, phone, desc, photo, initial }) => (

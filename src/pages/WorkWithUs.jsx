@@ -9,6 +9,7 @@ import '../styles/workwithus.css'
 
 /* ── Data ─────────────────────────────────────────────────── */
 const services = [
+  /* ── LEADGEN — commented out ────────────────────────────────
   {
     index: '01',
     Icon: IconTarget,
@@ -21,7 +22,8 @@ const services = [
     accentColor: '#7b2ff7',
     to: '/work-with-us/lead-generation',
   },
-  
+  ── END LEADGEN ─────────────────────────────────────────────── */
+
   {
     index: '02',
     Icon: IconSmartphone,
@@ -200,7 +202,8 @@ export default function WorkWithUs() {
 
             {/* Floating service pills */}
             <div className="wwu-hero-pills" aria-hidden="true">
-              <span className="wwu-hero-pill">Lead Generation</span>
+              {/* LEADGEN — commented out */}
+              {/* <span className="wwu-hero-pill">Lead Generation</span> */}
               <span className="wwu-hero-pill wwu-hero-pill--accent">Social Media</span>
               <span className="wwu-hero-pill">Event Management</span>
               <span className="wwu-hero-pill wwu-hero-pill--outline">Web Development</span>
@@ -241,7 +244,7 @@ export default function WorkWithUs() {
           <div className="wwu-services-header">
             <div className="section-label">Our Services</div>
             <h2 className="wwu-services-heading">
-              Four ways to <span className="highlight">grow.</span>
+              Three ways to <span className="highlight">grow.</span>
             </h2>
           </div>
 

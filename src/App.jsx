@@ -30,7 +30,8 @@ import ScrollProgress  from './components/ScrollProgress'
 import Home            from './pages/Home'
 import About           from './pages/About'
 import WorkWithUs      from './pages/WorkWithUs'
-import LeadGeneration  from './pages/workwithus/LeadGeneration'
+// ── LEADGEN — commented out ──────────────────────────────────
+// import LeadGeneration  from './pages/workwithus/LeadGeneration'
 import SocialMediaMgmt from './pages/workwithus/SocialMediaMgmt'
 import EventsWwU       from './pages/workwithus/Events'
 import WaterRipple from './components/WaterRipple'
@@ -54,7 +55,8 @@ function App() {
                   <Route path="/"                                     element={<Home />} />
                   <Route path="/about"                                element={<About />} />
                   <Route path="/work-with-us"                         element={<WorkWithUs />} />
-                  <Route path="/work-with-us/lead-generation"         element={<LeadGeneration />} />
+                  {/* LEADGEN — commented out */}
+                  {/* <Route path="/work-with-us/lead-generation" element={<LeadGeneration />} /> */}
                   <Route path="/work-with-us/social-media-management" element={<SocialMediaMgmt />} />
                   <Route path="/work-with-us/events"                  element={<EventsWwU />} />
                   <Route path="/work-with-us/web-development"         element={<WebDevelopmentWwU />} />

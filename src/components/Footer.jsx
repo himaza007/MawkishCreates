@@ -12,7 +12,8 @@ const pages = [
 ]
 
 const services = [
-  { label: 'Lead Generation',         to: '/work-with-us/lead-generation' },
+  // ── LEADGEN — commented out ──────────────────────────────────
+  // { label: 'Lead Generation',         to: '/work-with-us/lead-generation' },
   { label: 'Social Media Management', to: '/work-with-us/social-media-management' },
   { label: 'Events',                  to: '/work-with-us/events' },
   { label: 'Web Development',         to: '/work-with-us/web-development' },

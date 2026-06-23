@@ -4,7 +4,8 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
-  IconTarget, IconSmartphone, IconCalendar, IconGlobe,
+  // IconTarget, // LEADGEN — commented out
+  IconSmartphone, IconCalendar, IconGlobe,
 } from '../components/Icons'
 import { api } from '../utils/api'
 import ResultsTicker from '../components/ResultsTicker'
@@ -344,17 +345,20 @@ function GalaxyJourney() {
     }
 
     const planetList = [
+      /* ── LEADGEN — commented out ──────────────────────────────
       createPlanet({ name: 'Lead Generation', x: 24, y: -6, z: -62, size: 4.2, color: '#7b2ff7', emissive: '#35106f', ring: '#c9a84c' }),
+      ── END LEADGEN ─────────────────────────────────────────── */
       createPlanet({ name: 'Social Media Management', x: -27, y: 9, z: -142, size: 6.4, color: '#d8c4ff', emissive: '#5f2cc2' }),
       createPlanet({ name: 'Event Management', x: 28, y: 7, z: -238, size: 5.2, color: '#c9a84c', emissive: '#7c5520', ring: '#ffffff' }),
       createPlanet({ name: 'Web Development', x: -18, y: -4, z: -338, size: 7.4, color: '#5c18b8', emissive: '#2d0b66' }),
     ]
 
     const planetMap = {
-      'Lead Generation': planetList[0],
-      'Social Media Management': planetList[1],
-      'Event Management': planetList[2],
-      'Web Development': planetList[3],
+      // ── LEADGEN — commented out ──────────────────────────────
+      // 'Lead Generation': planetList[0],
+      'Social Media Management': planetList[0],
+      'Event Management': planetList[1],
+      'Web Development': planetList[2],
     }
 
     const moonGeometry = new THREE.SphereGeometry(0.55, 18, 18)
@@ -755,12 +759,14 @@ function useReveal() {
 
 /* ── Static Data ─────────────────────────────────────────── */
 const services = [
+  /* ── LEADGEN — commented out ────────────────────────────────
   {
     Icon: IconTarget,
     title: 'Lead Generation',
     desc: 'We build systems that bring the right people to you: qualified, ready, and converting. No guesswork, just results.',
     to: '/work-with-us/lead-generation',
   },
+  ── END LEADGEN ─────────────────────────────────────────────── */
   {
     Icon: IconSmartphone,
     title: 'Social Media Management',
@@ -783,7 +789,8 @@ const services = [
 
 const metrics = [
   { number: '200', unit: '+', label: 'Clients Served' },
-  { number: '50', unit: 'M', label: 'Leads Generated' },
+  // ── LEADGEN — commented out ──────────────────────────────────
+  // { number: '50', unit: 'M', label: 'Leads Generated' },
   { number: '340', unit: '%', label: 'Avg. Revenue Growth' },
   { number: '5', unit: '+', label: 'Years of Expertise' },
 ]
@@ -966,9 +973,16 @@ export default function Home() {
 
                   <div className="divider" />
 
+                  {/* ── LEADGEN — subtitle mentions lead gen; update copy if needed
                   <p className="section-subtitle">
                     Mawkish Creates is a results-obsessed creative partner dedicated to scaling
                     businesses through strategic lead generation, social media management, and event marketing.
+                    We don't just run campaigns, we engineer your growth.
+                  </p>
+                  ── END LEADGEN ────────────────────────────────────────────── */}
+                  <p className="section-subtitle">
+                    Mawkish Creates is a results-obsessed creative partner dedicated to scaling
+                    businesses through social media management and event marketing.
                     We don't just run campaigns, we engineer your growth.
                   </p>
 
